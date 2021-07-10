@@ -1,6 +1,6 @@
 <template>
    <v-app id = "app">
-     <div> Ki obostha </div>
+     <router-view/>
    </v-app>
 </template>
 
