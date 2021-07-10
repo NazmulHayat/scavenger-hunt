@@ -8,7 +8,7 @@
         ></v-img>
         <span id='main_text' class="white--text font-weight-bold d-none d-sm-flex">PIHACKS</span>
         <v-spacer></v-spacer>
-        <div :v-if="deviceWidth>600">
+        <div>
             <v-list-tile v-for="link in links" :key="link.text" class="p-0 text-none">
                 <v-list-tile-action>
                     <v-btn router v-if="link.route != '/schedule'" :to="link.route" text color="white" x-large id="BTN" class="font-weight-bold text-none">
@@ -32,8 +32,7 @@ export default {
             links: [
                 { text: 'Easter Egg', route : '/'},
                 { text: 'Break the Code', route : '/break-the-code'},
-            ],
-            deviceWidth :document.body.clientWidth,
+            ]
         }
     }
 }

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Easter from '../views/Easter.vue'
-import Break from '../views/Break.vue'
+import Break from '../views/Break2.vue'
 
 Vue.use(VueRouter)
 

@@ -1,18 +1,18 @@
 <template>
     <nav>
-    <v-app-bar dark app height="75" class="black white--text" id="toolbar-bg" elevation="100">
-        <v-img
-            src="@/assets/pihacks_logo.png"
-            max-width='50'
-            contain
-        ></v-img>
-        <span id='main_text' class="white--text font-weight-bold">PIHACKS</span>
-        <v-spacer></v-spacer>
-        <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-    </v-app-bar>
+        <v-app-bar dark app height="75" class="black white--text" id="toolbar-bg" elevation="100" dense>
+          <v-img
+              src="@/assets/pihacks_logo.png"
+              max-width='50'
+              contain
+          ></v-img>
+            <span id='main_text' class="white--text font-weight-bold">PIHACKS</span>
+            <v-spacer></v-spacer>
+            <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+        </v-app-bar>
     <v-navigation-drawer
       v-model="drawer" fixed temporary>
-      <v-list nav dense>
+      <v-list nav>
         <v-list-item-group v-model="group" active-class="light-blue--text text--accent-4">
           <v-list-item v-for="(link,i) in links" :key="i" :to="link.route">
             <v-list-item-icon>
