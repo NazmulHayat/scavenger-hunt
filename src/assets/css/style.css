@@ -38,7 +38,7 @@ Transition Layer
 .cd-transition-layer.opening .bg-layer {
   -webkit-animation: cd-sequence 0.8s steps(24);
   -moz-animation: cd-sequence 0.8s steps(24);
-  animation: cd-sequence 10s steps(24);
+  animation: cd-sequence 20s linear;
   -webkit-animation-fill-mode: forwards;
   -moz-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
@@ -46,7 +46,7 @@ Transition Layer
 .cd-transition-layer.closing .bg-layer {
   -webkit-animation: cd-sequence-reverse 0.8s steps(24);
   -moz-animation: cd-sequence-reverse 0.8s steps(24);
-  animation: cd-sequence-reverse 0.8s steps(24);
+  animation: cd-sequence-reverse 10s steps(24);
   -webkit-animation-fill-mode: forwards;
   -moz-animation-fill-mode: forwards;
   animation-fill-mode: forwards;

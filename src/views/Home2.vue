@@ -24,16 +24,20 @@ jQuery(document).ready(function($){
     var transitionLayer = $('.cd-transition-layer'),
 		transitionBackground = transitionLayer.children();
     var frameProportion = 1.78,
-        frames = 25,
-        resize = false;
-        
-    setLayerDimensions();
-    $(window).on('resize', function(){
-        if( !resize ) {
-            resize = true;
-            (!window.requestAnimationFrame) ? setTimeout(setLayerDimensions, 300) : window.requestAnimationFrame(setLayerDimensions);
-        }
+        frames = 25;
+    var fixing=false;
+    window.addEventListener("isAnimating",()=>{
+        fixing = true;
+        window.requestAnimationFrame(Frame);
     });
+    window.addEventListener("AnimationStop",()=>{
+        fixing = false;
+    });
+    function Frame(){
+        setLayerDimensions();
+        if(fixing)
+            window.requestAnimationFrame(Frame);
+    }
     function setLayerDimensions() {
         var windowWidth = $(window).width(),
             windowHeight = $(window).height(),
@@ -46,14 +50,11 @@ jQuery(document).ready(function($){
             layerHeight = windowHeight*1.2;
             layerWidth = layerHeight*frameProportion;
         }
-        
-            console.log("hello");
+        // console.log(layerHeight, layerWidth);
         transitionBackground.css({
             'width': layerWidth*frames+'px',
             'height': layerHeight+'px',
         });
-
-        resize = false;
     }
 })
 export default {
@@ -68,9 +69,11 @@ export default {
     methods:{
         ShowData(){
             const el=document.getElementsByClassName("cd-transition-layer")[0];
+            window.dispatchEvent(new Event("isAnimating"));
             el.classList.add("visible");
             el.classList.add("opening");
             el.addEventListener("animationend",()=>{
+                window.dispatchEvent(new Event("AnimationStop"));
                 document.getElementsByClassName("answer-content")[0]
                     .classList.add("visible");
             },{once:true});
@@ -80,8 +83,10 @@ export default {
             el.classList.add("hide");
             el.addEventListener("transitionend",()=>{
                 const el2=document.getElementsByClassName("cd-transition-layer")[0];
+                window.dispatchEvent(new Event("isAnimating"));
                 el2.classList.add("closing");
                 el2.addEventListener("animationend",()=>{
+                    window.dispatchEvent(new Event("AnimationStop"));
                     el.classList.remove("visible");
                     el.classList.remove("hide");
                     el2.classList.remove("visible");
@@ -89,7 +94,6 @@ export default {
                     el2.classList.remove("closing");
                 },{once:true});
             },{once:true});
-            
         }
     },
 }
