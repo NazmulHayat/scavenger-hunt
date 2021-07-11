@@ -1,53 +1,128 @@
 <template>
-    <v-container>
-        <link href='https://fonts.googleapis.com/css?family=PT+Sans:400,700|IM+Fell+Double+Pica:400italic' rel='stylesheet' type='text/css'>
-        <main class="cd-main-content">
-            <div class="center">
-                <h1>Ink Transition Effect</h1>
-                <a href="#0" class="cd-btn cd-modal-trigger">Start Effect</a>
-            </div>
-        </main> <!-- .cd-main-content -->
-
-        <div class="cd-modal">
-            <div class="modal-content">
-                <h1>My Modal Content</h1>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad modi repellendus, optio eveniet eligendi molestiae? Fugiat, temporibus! A rerum pariatur neque laborum earum, illum voluptatibus eum voluptatem fugiat, porro animi tempora? Sit harum nulla, nesciunt molestias, iusto aliquam aperiam est qui possimus reprehenderit ipsam ea aut assumenda inventore iste! Animi quaerat facere repudiandae earum quisquam accusamus tempora, delectus nesciunt, provident quae aliquam, voluptatum beatae quis similique in maiores repellat eligendi voluptas veniam optio illum vero! Eius, dignissimos esse eligendi veniam.
-                </p>
-
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis saepe amet sit fugit rerum, corporis minus vitae officia quaerat incidunt voluptate, blanditiis ea est quibusdam voluptas animi quasi totam magni, commodi praesentium. Possimus quam illo ipsam iste unde totam cupiditate deleniti, impedit assumenda hic eligendi natus tempora dolores quod mollitia ab non sunt eaque adipisci, suscipit quas aliquid officiis beatae. Necessitatibus voluptatibus, perferendis tenetur perspiciatis adipisci nesciunt eum ex fuga commodi iure numquam enim rem ullam labore nisi magni sint voluptatem quos! Eum iure exercitationem voluptates repellendus culpa doloremque laborum animi illum, sint fugit soluta possimus a fuga veritatis molestias corporis placeat illo pariatur dolor reiciendis earum, sapiente omnis. Placeat maiores omnis, porro officia, laborum eos. Fugiat mollitia inventore consequuntur odit eaque, rerum recusandae, eum sint molestiae consequatur culpa deserunt quae aliquid dolor tempora tenetur architecto repellendus enim quasi atque, odio voluptas. Tenetur repellendus explicabo ipsum inventore quia aut eos expedita necessitatibus asperiores blanditiis! Delectus nisi laudantium ipsum! Quasi blanditiis corrupti dicta maiores placeat laboriosam delectus ipsum facere voluptas, magnam voluptatibus, perferendis alias ullam saepe, perspiciatis recusandae voluptates, dolores praesentium?
-                </p>
-            </div> <!-- .modal-content -->
-
-            <a href="#0" class="modal-close">Close</a>
-        </div> <!-- .cd-modal -->
-
+    <div class="wrapper">
+        <div class="main-content">
+            <v-btn @click="ShowData()">Click Me</v-btn>
+        </div>
+        <div class="answer-content">
+            <AnswerPage
+                verdict="Accepted"
+                desc="DANG BOIIIII"
+            />
+            <v-btn @click="HideData()">Click Me</v-btn>
+        </div>
+        
         <div class="cd-transition-layer"> 
             <div class="bg-layer"></div>
-        </div> <!-- .cd-transition-layer -->
-    </v-container>
+        </div>
+    </div>
 </template>
 
 <script>
-// import "modernizr"
-import "../plugins/js/main.js";
-// import AnswerPage from "../components/AnswerPage.vue"
-import image from "../assets/never.jpg"
+import jQuery from "jquery";
+import AnswerPage from "../components/AnswerPage.vue";
+jQuery(document).ready(function($){
+    var transitionLayer = $('.cd-transition-layer'),
+		transitionBackground = transitionLayer.children();
+    var frameProportion = 1.78,
+        frames = 25,
+        resize = false;
+        
+    setLayerDimensions();
+    $(window).on('resize', function(){
+        if( !resize ) {
+            resize = true;
+            (!window.requestAnimationFrame) ? setTimeout(setLayerDimensions, 300) : window.requestAnimationFrame(setLayerDimensions);
+        }
+    });
+    function setLayerDimensions() {
+        var windowWidth = $(window).width(),
+            windowHeight = $(window).height(),
+            layerHeight, layerWidth;
+
+        if( windowWidth/windowHeight > frameProportion ) {
+            layerWidth = windowWidth;
+            layerHeight = layerWidth/frameProportion;
+        } else {
+            layerHeight = windowHeight*1.2;
+            layerWidth = layerHeight*frameProportion;
+        }
+        
+            console.log("hello");
+        transitionBackground.css({
+            'width': layerWidth*frames+'px',
+            'height': layerHeight+'px',
+        });
+
+        resize = false;
+    }
+})
 export default {
     components:{
-        // AnswerPage
+        AnswerPage
     },
     data(){
         return {
-            Image:image
+            
         }
-    }
+    },
+    methods:{
+        ShowData(){
+            const el=document.getElementsByClassName("cd-transition-layer")[0];
+            el.classList.add("visible");
+            el.classList.add("opening");
+            el.addEventListener("animationend",()=>{
+                document.getElementsByClassName("answer-content")[0]
+                    .classList.add("visible");
+            },{once:true});
+        },
+        HideData(){
+            const el=document.getElementsByClassName("answer-content")[0];
+            el.classList.add("hide");
+            el.addEventListener("transitionend",()=>{
+                const el2=document.getElementsByClassName("cd-transition-layer")[0];
+                el2.classList.add("closing");
+                el2.addEventListener("animationend",()=>{
+                    el.classList.remove("visible");
+                    el.classList.remove("hide");
+                    el2.classList.remove("visible");
+                    el2.classList.remove("opening");
+                    el2.classList.remove("closing");
+                },{once:true});
+            },{once:true});
+            
+        }
+    },
 }
 
 </script>
 
 <style scoped>
-@import url("../assets/css/reset.css");
 @import url("../assets/css/style.css");
+.wrapper{
+    height:100%;
+}
+.main-content{
+    position: absolute;
+}
+.answer-content{
+    background-image: url("../assets/img/modal-bg.jpg");
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100%;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s, visibility 1s;
+    
+}
+.answer-content.visible{
+    opacity: 1;
+    visibility: visible;
+}
+.answer-content.visible.hide{
+    opacity: 0;
+    visibility: hidden;
+}
 </style>
