@@ -11,6 +11,7 @@
 
 
 <style>
+html { overflow-y: auto !important}
 #app{
     background: url('./assets/bg.jpg');
     background-size: cover;

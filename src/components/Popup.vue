@@ -1,15 +1,14 @@
 <template>
-    <v-dialog max-width="700px">
+    <v-dialog max-width="700px" >
         <template v-slot:activator="{ on, attrs }">
             <v-btn
                 slot="activator"
-                class="faq mx-2 text-h4 mb-4 font-weight-bold"
+                class="info-btn"
                 fab
-                large
                 v-bind="attrs"
                 v-on="on"
                 dark
-            >?</v-btn>    
+            ><v-icon large>mdi-information-outline</v-icon></v-btn>
         </template>
         <v-card class="pa-4">
             <h2> All you need to do is Give Up </h2>
@@ -18,7 +17,6 @@
 </template>
 
 <script>
-console.log("POPUP");
 export default {
 
 }
@@ -27,5 +25,9 @@ export default {
 
 
 <style scoped>
-
+.info-btn{
+    position: absolute;
+    bottom: 16px;
+    right:16px;
+}
 </style>

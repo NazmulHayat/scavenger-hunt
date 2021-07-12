@@ -1,36 +1,59 @@
 <template>
-    <div class="">
-      <img class="img" src="../assets/img/modal-bg.jpg">
+    <div>
+      <div id="answer-content">
+        <AnswerPage
+        :verdict="verdict"
+        :desc="desc"
+        :image="image"
+        />
+        <v-btn fab class="close-btn" @click="CloseAnswer()">
+          <v-icon large>mdi-close</v-icon>
+        </v-btn>
+      </div>
+      <InkTran class="ink"/>
       <div class="text-main">
           <typewriter
-          :replace="replace"
           :type-interval="100"
           :replace-interval="1000"
           class="typewriter pt-2"
           >
-          <div class="welcome-text welcome-text1 welcome-text2 welcome-text3 font-weight-medium"> Easter Egg Hunt</div>
+          <div class="welcome-text welcome-text1 
+          welcome-text2 welcome-text3
+          ">Easter Egg Hunt</div>
           </typewriter>
       </div>
-      <v-container class="pp d-flex flex-column justify-center">
+      <v-container class="pp d-flex flex-column justify-center
+            " fluid>
       <v-card
-        class="main-body" outlined color="transparent" elevation="24">
-        <v-row align="center"
+        class="main-body
+        px-5 py-4
+        
+        "
+        outlined color="transparent" elevation="24">
+        <v-row align="center" dense
         justify="center">
           <v-col>
             <v-form class="FORM">
               <div class="form__group field">
-                <input type="input" class="form__field" placeholder="Name" name="name" id='name' required />
+                <input type="input" class="form__field" autocomplete="off" placeholder="Name" name="name" id='name' required />
                 <label for="name" class="form__label">Your ID:</label>
               </div>
               <div class="form__group field">
-                <input type="input" class="form__field" placeholder="Name" name="name" id='name' required />
+                <input type="input" class="form__field" autocomplete="off" placeholder="Name" name="name" id='name' required />
                 <label for="name" class="form__label">Answer</label>
               </div>
             </v-form>
             <div class="amra pt-10" style="display:flex; justify-content:center">
-              <button type="button" @click = "submit()" class="button69 font-weight-bold" x-large>
-                 <i class="loading fa fa-refresh fa-spin"></i>
-                <div class="inside-text"> Submit </div>
+              <button type="button" @click="submit()" class="button69 font-weight-bold" x-large>
+                 <!-- <i class="loading fa fa-refresh fa-spin"></i> -->
+                 <div class="btn-cont">
+                  <v-progress-circular
+                    indeterminate
+                    class="loading"
+                  ></v-progress-circular>
+                  <div class="inside-text"> Submit </div>
+                 </div>
+                 
               </button>
             </div>
           </v-col>
@@ -38,38 +61,60 @@
         
       </v-card> 
       </v-container>
-      <div class="overlay px-8">
         <Popup />
-      </div>
     </div>
 </template>
 
 <script>
 import typewriter from '../components/typewriter.vue' 
 import Popup from '../components/Popup.vue'
+import AnswerPage from "../components/AnswerPage.vue"
+import InkTran from "../components/InkBlotTransition.vue"
 export default {
-    components : {typewriter, Popup},
-    // components: {},
+    components : {typewriter, Popup, AnswerPage, InkTran},
     data: () => ({
         dialog: false,
         text: "Easter Egg Hunt",
-        loaded: false
+        loaded: false,
+        animating: false,
+        verdict:"Wrong",
+        desc:"Never gonna give you up, never gonna let you down",
+        image: require("../assets/never.jpg")
     }),
     methods: {
       submit() {
-        document.getElementsByClassName('loading')[0].style.visibility = "visible";
+        if(this.animating) return; // allow only one submit
+        this.animating = true;
+        //Start Loading Data
+        document.getElementsByClassName('loading')[0].classList.add("visible");
         document.getElementsByClassName('inside-text')[0].style.visibility = "hidden";
         
         setTimeout(()=>{
-          // document.getElementsByClassName('loading')[0].style.visibility = "hidden";
-          document.getElementsByClassName('img')[0].classList.add('visible');
-        }, 2000)
-
-        setTimeout(()=>{
-          document.getElementsByClassName('img')[0].classList.remove('visible');
-          document.getElementsByClassName('loading')[0].style.visibility = "hidden";
+          //Data loading finished
+          document.getElementsByClassName('loading')[0].classList.remove("visible");
           document.getElementsByClassName('inside-text')[0].style.visibility = "visible";
-        }, 10000)
+          let ink = document.getElementsByClassName("ink")[0];
+
+          ink.addEventListener("transitionend",()=>{ //add lisnter b4 transition
+            this.animating = false;
+            document.getElementById('answer-content').classList.add('visible'); //Finally show data
+          },{once:true});
+
+          ink.dispatchEvent(new Event("StartTransition"));
+        }, 2000)
+      },
+      CloseAnswer(){
+        if(this.animating) return;
+        this.animating = true;
+        let AnswerContent = document.getElementById('answer-content');
+        let tempFunc = (e)=>{
+          if(e.target !== e.currentTarget) return;
+          this.animating = false;
+          document.getElementsByClassName("ink")[0].dispatchEvent(new Event("StartTransition"));
+          AnswerContent.removeEventListener("transitionend",tempFunc);
+        }
+        AnswerContent.addEventListener("transitionend",tempFunc)//add lisnter b4 transition
+        document.getElementById('answer-content').classList.remove('visible');
       }
     }
 }
@@ -90,7 +135,16 @@ export default {
 
 <style>
 @import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
+.btn-cont{
+  display: flex;
+  justify-content: center;
+}
 
+.close-btn{
+  position: absolute;
+  top: 16px;
+  right:16px;
+}
 .fa {
   margin-top: 5px;
   margin-left: -10px;
@@ -99,17 +153,32 @@ export default {
 .loading {
   position: absolute;
   visibility: hidden;
+  opacity: 0;
+}
+.loading.visible {
+  visibility: visible;
+  opacity: 1;
 }
 
-.img{
+#answer-content{
   position: fixed;
+  height: 100%;
+  width:100%;
   z-index: 4;
   visibility: hidden;
   opacity: 0;
-  transition: visibility 1s, opacity 1s;
+  transition: visibility 0.5s, opacity 0.5s;
+  transition-timing-function: ease-out;
+  background-image: url("../assets/img/modal-bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.ink{
+  z-index: 3;
 }
 
-.img.visible{
+#answer-content.visible{
   visibility: visible;
   opacity: 1;
 }
@@ -130,11 +199,6 @@ export default {
   }
 
 @import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital@1&display=swap');
-
-.overlay{
-  display: flex;
-  justify-content: flex-end;
-}
 
 .button69 {
   background-color: black;
@@ -176,15 +240,10 @@ export default {
 }
 
 .main-body{
-  width: 45vw;
+  width:100%;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 60px;
-  padding-right: 60px;
-  padding-top: 50px;
-  padding-bottom: 50px;
-  /* top: 200px; */
-  /* background: url('../assets/123.jpg'); */
+  max-width:700px;
   
 }
 
@@ -247,10 +306,11 @@ export default {
   box-shadow: none;
 }
 
-/* demo */
 .pp{
-  height: 70vh;
-  /* height: 100%; */
+  height: 100%;
+  position:fixed;
+  top:0;
+  left:0;
 }
 
 .answer{
@@ -267,7 +327,7 @@ export default {
 .welcome-text.welcome-text1.welcome-text2.welcome-text3{
     font-family: Freshman !important;
     /* font-family: 'Lobster Two', cursive; */
-    font-size: 80px;
+    font-size: 60px;
     color: black
     /* font-family: im fell double pica,serif !important; */
 }
@@ -280,69 +340,31 @@ export default {
 .typewriter.content *:last-child::after {
     animation: blinking 0.5s steps(2,jump-none) 0s infinite alternate !important;
 }
-    
 
-/* media queries */
 
-@media only screen and (max-width: 1450px) {
+
+@media only screen and (min-width: 690px) {
   .welcome-text.welcome-text1.welcome-text2.welcome-text3{
-      font-family: Freshman !important;
-      font-size: 70px;
-      color: black
+    font-size: 70px;
   }
 }
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (min-width: 1000px) {
   .main-body{
-    width: 60vw;
+    max-width: 800px;
   }
-}
-
-@media only screen and (max-width: 930px) {
-  .main-body{
-    width: 70vw;
-  }
-}
-
-@media only screen and (max-width: 800px) {
-  .main-body{
-    width: 70vw;
-    padding-left: 45px;
-    padding-right: 45px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-  }
-}
-
-@media only screen and (max-width: 700px) {
-  .main-body{
-    width: 80vw;
-    padding-left: 45px;
-    padding-right: 45px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-  }
-}
-
-@media only screen and (max-width: 560px) {
-  .button69{
-    font-size: 18px;
-  }
-}
-
-@media only screen and (max-width: 490px) {
   .welcome-text.welcome-text1.welcome-text2.welcome-text3{
-    font-size: 55px;
-  }
-  .main-body{
-    width: 80vw;
-    padding-left: 35px;
-    padding-right: 35px;
-    padding-top: 25px;
-    padding-bottom: 30px;
+    font-size: 80px;
   }
 }
 
-
+@media only screen and (max-height: 590px) {
+  .pp{
+    position:initial;
+    top:initial;
+    left:initial;
+    height: 70vh;
+  }
+}
 </style>
 

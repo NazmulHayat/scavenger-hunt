@@ -1,5 +1,5 @@
 <template>
-    <div id="animation">
+    <div id="transition">
     </div>
 </template>
 
@@ -13,6 +13,7 @@ class AnimLoop {
         this.delta=1;
         this.StartTime=performance.now();
         this.frame=0;
+        this.id=null;
         this.loop=()=>{
             var now=performance.now();
             var TimeCompleted=now - this.StartTime;
@@ -20,17 +21,30 @@ class AnimLoop {
                 this.StartTime=now-(TimeCompleted%this.Interval);
                 this.el.style.backgroundImage="url("+ images[this.frame].src + ")";
                 this.frame+=this.delta;
-                if(this.frame==-1 || this.frame==frames)
+                if(this.frame<=-1 || this.frame>=frames)
                 {
                     if(this.delta<=-1)
                         this.el.classList.remove("visible");
-                    this.el.dispatchEvent(new Event("animationend"));
+                    this.el.dispatchEvent(new Event("transitionend"));
                     return;
                 }
             }
             requestAnimationFrame(this.loop);
         }
     }
+    // loop(){
+    //     this.id = setInterval(()=>{
+    //         this.el.style.backgroundImage="url("+ images[this.frame].src + ")";
+    //         this.frame+=this.delta;
+    //         if(this.frame<=-1 || this.frame>=frames)
+    //         {
+    //             if(this.delta<=-1)
+    //                 this.el.classList.remove("visible");
+    //             this.el.dispatchEvent(new Event("transitionend"));
+    //             clearInterval(this.id);
+    //         }
+    //     },this.Interval);
+    // }
     Forwardloop(){
         this.StartTime=performance.now();
         this.frame=0;
@@ -54,24 +68,31 @@ export default {
             mntd : false,
             el :null,
             evnt:false,
-            loop:null,
+            Aloop:null,
             flag:false,
+            animating:false
         }
     },
     mounted(){
-        this.el = document.getElementById("animation");
+        this.el = document.getElementById("transition");
         this.mntd = true;
         this.el.addEventListener("ImagesLoaded",()=>{
-            this.loop = new AnimLoop(25, this.el);
+            this.Aloop = new AnimLoop(20, this.el);
             this.evnt=true;
-            // this.el.dispatchEvent(new Event("StartAnimation"));
+            // this.el.dispatchEvent(new Event("StartTransition"));
         })
-        this.el.addEventListener("StartAnimation",()=>{
+        this.el.addEventListener("transitionend",()=>{
+            this.animating = false;
+            // this.el.dispatchEvent(new Event("StartTransition"))
+        })
+        this.el.addEventListener("StartTransition",()=>{
+            if(this.animating) return;
+            this.animating = true;
             if(this.flag)
-                this.loop.Backwardloop();
+                this.Aloop.Backwardloop();
             else{
                 this.el.classList.add("visible");
-                this.loop.Forwardloop();
+                this.Aloop.Forwardloop();
             }
             this.flag=!this.flag;
         })
@@ -99,7 +120,7 @@ export default {
 </script>
 
 <style scoped>
-#animation{
+#transition{
     height:100%;
     width:100%;
     background-repeat: no-repeat;
@@ -109,7 +130,7 @@ export default {
     visibility: hidden;
     position:fixed;
 }
-#animation.visible{
+#transition.visible{
     opacity: 1;
     visibility: visible;
 }

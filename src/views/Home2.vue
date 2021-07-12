@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import AnswerPage from "../components/InkBlotTransition.vue";
+import AnswerPage from '../components/Popup.vue';
 
 export default {
     components:{
