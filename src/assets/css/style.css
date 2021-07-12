@@ -4,6 +4,7 @@
 Transition Layer 
 
 -------------------------------- */
+
 .cd-transition-layer {
   position: fixed;
   top: 0;
@@ -38,7 +39,7 @@ Transition Layer
 .cd-transition-layer.opening .bg-layer {
   -webkit-animation: cd-sequence 0.8s steps(24);
   -moz-animation: cd-sequence 0.8s steps(24);
-  animation: cd-sequence 10s steps(24);
+  animation: cd-sequence 1s steps(24);
   -webkit-animation-fill-mode: forwards;
   -moz-animation-fill-mode: forwards;
   animation-fill-mode: forwards;
