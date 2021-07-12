@@ -3,7 +3,7 @@
         <template v-slot:activator="{ on, attrs }">
             <v-btn
                 slot="activator"
-                class="faq mx-2 text-h4 mb-4 font-weight-bold"
+                class="faq mx-2 text-h4 font-weight-bold"
                 fab
                 large
                 v-bind="attrs"
