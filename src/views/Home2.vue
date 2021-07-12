@@ -1,18 +1,12 @@
 <template>
     <div class="wrapper">
-        <div class="answer-content">
-            <AnswerPage
-                verdict="Accepted"
-                desc="DANG BOIIIII Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui ut perferendis quisquam nesciunt et aliquam consequatur, inventore debitis quasi optio error explicabo magnam porro eum beatae, vel voluptates pariatur libero." 
-                :image='img'
-            />
-        </div>
+        <AnswerPage/>
     </div>
 </template>
 
 <script>
-import AnswerPage from '../components/AnswerPage.vue';
-var img = require('../assets/never.jpg');
+import AnswerPage from '../components/Popup.vue';
+
 export default {
     components:{
         AnswerPage
@@ -22,9 +16,13 @@ export default {
             img: img
         }
     },
-    methods:{
-        
-    }
 }
 
 </script>
+
+<style scoped>
+.wrapper{
+    height:100%;
+    width:100%;
+}
+</style>
