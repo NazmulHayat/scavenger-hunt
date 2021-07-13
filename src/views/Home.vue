@@ -2,9 +2,10 @@
     <div>
       <div id="answer-content">
         <AnswerPage
-        :verdict="verdict"
+        verdict="Accepted"
         :desc="desc"
         :image="image"
+        id="namdao"
         />
         <v-btn fab class="close-btn" @click="CloseAnswer()" small>
           <v-icon>mdi-close</v-icon>
@@ -22,7 +23,7 @@
           ">Easter Egg Hunt</div>
           </typewriter>
       </div>
-      <v-container class="pp d-flex flex-column justify-center
+      <v-container class="pp px-6 d-flex flex-column justify-center
             " fluid>
       <v-card
         class="main-body
@@ -77,7 +78,7 @@ export default {
         text: "Easter Egg Hunt",
         loaded: false,
         animating: false,
-        verdict:"Wrong",
+        verdict:"Accepted",
         desc:"Never gonna give you up, never gonna let you down",
         image: require("../assets/never.jpg")
     }),
@@ -86,6 +87,7 @@ export default {
         if(this.animating) return; // allow only one submit
         this.animating = true;
         //Start Loading Data
+        document.getElementById('namdao').dispatchEvent(new Event("change"));
         document.getElementsByClassName('loading')[0].classList.add("visible");
         document.getElementsByClassName('inside-text')[0].style.visibility = "hidden";
         
@@ -169,7 +171,7 @@ export default {
   opacity: 0;
   transition: visibility 0.5s, opacity 0.5s;
   transition-timing-function: ease-out;
-  background-image: url("../assets/img/modal-bg.jpg");
+  background-image: url("../assets/modal-bg.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -370,5 +372,6 @@ export default {
     height: 70vh;
   }
 }
+
 </style>
 

@@ -113,7 +113,7 @@ export default {
         for(var i=0;i<frames;i++){
             images[i] = new Image();
             images[i].onload = this.LoadChecker;
-            images[i].src = require("../assets/img/Frames/img" + (i+1) + ".png");
+            images[i].src = require("../assets/TransitionFrames/img" + (i+1) + ".png");
         }
     },
     methods:{
