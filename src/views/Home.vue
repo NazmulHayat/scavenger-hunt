@@ -5,7 +5,7 @@
         verdict="Accepted"
         :desc="desc"
         :image="image"
-        id="namdao"
+        id="anspg"
         />
         <v-btn fab class="close-btn" @click="CloseAnswer()" small>
           <v-icon>mdi-close</v-icon>
@@ -87,7 +87,7 @@ export default {
         if(this.animating) return; // allow only one submit
         this.animating = true;
         //Start Loading Data
-        document.getElementById('namdao').dispatchEvent(new Event("change"));
+        document.getElementById('anspg').dispatchEvent(new Event("ChangeMeme"));
         document.getElementsByClassName('loading')[0].classList.add("visible");
         document.getElementsByClassName('inside-text')[0].style.visibility = "hidden";
         
