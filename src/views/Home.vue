@@ -6,8 +6,8 @@
         :desc="desc"
         :image="image"
         />
-        <v-btn fab class="close-btn" @click="CloseAnswer()">
-          <v-icon large>mdi-close</v-icon>
+        <v-btn fab class="close-btn" @click="CloseAnswer()" small>
+          <v-icon>mdi-close</v-icon>
         </v-btn>
       </div>
       <InkTran class="ink"/>
@@ -27,7 +27,7 @@
       <v-card
         class="main-body
         px-5 py-4
-        
+        px-md-8 px-md-10
         "
         outlined color="transparent" elevation="24">
         <v-row align="center" dense
@@ -69,7 +69,7 @@
 import typewriter from '../components/typewriter.vue' 
 import Popup from '../components/Popup.vue'
 import AnswerPage from "../components/AnswerPage.vue"
-import InkTran from "../components/InkBlotTransition.vue"
+import InkTran from "../components/InkBlotTransition2.vue"
 export default {
     components : {typewriter, Popup, AnswerPage, InkTran},
     data: () => ({
@@ -326,10 +326,8 @@ export default {
 
 .welcome-text.welcome-text1.welcome-text2.welcome-text3{
     font-family: Freshman !important;
-    /* font-family: 'Lobster Two', cursive; */
-    font-size: 60px;
-    color: black
-    /* font-family: im fell double pica,serif !important; */
+    font-size: 50px;
+    color: black;
 }
 
 @keyframes blinking {
@@ -342,7 +340,12 @@ export default {
 }
 
 
-
+  
+@media only screen and (min-width: 580px) {
+  .welcome-text.welcome-text1.welcome-text2.welcome-text3{
+    font-size: 60px;
+  }
+}
 @media only screen and (min-width: 690px) {
   .welcome-text.welcome-text1.welcome-text2.welcome-text3{
     font-size: 70px;
@@ -359,6 +362,7 @@ export default {
 }
 
 @media only screen and (max-height: 590px) {
+  
   .pp{
     position:initial;
     top:initial;

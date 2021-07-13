@@ -1,11 +1,12 @@
 <template>
     <div class="wrapper">
-        <AnswerPage/>
+        <v-btn @click="run()" class="btnn">Click</v-btn>
+        <AnswerPage class="ink"/>
     </div>
 </template>
 
 <script>
-import AnswerPage from '../components/Popup.vue';
+import AnswerPage from '../components/InkBlotTransition2.vue';
 
 export default {
     components:{
@@ -16,6 +17,11 @@ export default {
             
         }
     },
+    methods:{
+        run(){
+            document.getElementsByClassName("ink")[0].dispatchEvent(new Event("StartTransition"));
+        }
+    }
 }
 
 </script>
@@ -24,5 +30,11 @@ export default {
 .wrapper{
     height:100%;
     width:100%;
+}
+.btnn{
+    position:absolute;
+    left:0;
+    top:0;
+    z-index: 10;
 }
 </style>
