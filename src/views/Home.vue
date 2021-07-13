@@ -78,7 +78,7 @@ export default {
         text: "Easter Egg Hunt",
         loaded: false,
         animating: false,
-        verdict:"Accepted",
+        verdict:"Wrong",
         desc:"Never gonna give you up, never gonna let you down",
         image: require("../assets/never.jpg")
     }),

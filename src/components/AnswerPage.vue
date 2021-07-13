@@ -62,7 +62,7 @@ export default {
         }
     },
     mounted() {
-        document.getElementsByClassName('card-body')[0].addEventListener('change', ()=>{
+        document.getElementsByClassName('for-flexing')[0].addEventListener('change', ()=>{
             this.asm();
         })
     },
@@ -72,7 +72,7 @@ export default {
         }
     }
 }
-</script>H
+</script>
 
 
 <style>
