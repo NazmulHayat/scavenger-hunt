@@ -5,6 +5,7 @@
         :verdict="verdict"
         :desc="desc"
         :image="image"
+        id="namdao"
         />
         <v-btn fab class="close-btn" @click="CloseAnswer()">
           <v-icon large>mdi-close</v-icon>
@@ -77,7 +78,7 @@ export default {
         text: "Easter Egg Hunt",
         loaded: false,
         animating: false,
-        verdict:"Wrong",
+        verdict:"Accepted",
         desc:"Never gonna give you up, never gonna let you down",
         image: require("../assets/never.jpg")
     }),
@@ -86,6 +87,7 @@ export default {
         if(this.animating) return; // allow only one submit
         this.animating = true;
         //Start Loading Data
+        document.getElementById('namdao').dispatchEvent(new Event("change"));
         document.getElementsByClassName('loading')[0].classList.add("visible");
         document.getElementsByClassName('inside-text')[0].style.visibility = "hidden";
         
@@ -341,8 +343,6 @@ export default {
     animation: blinking 0.5s steps(2,jump-none) 0s infinite alternate !important;
 }
 
-
-
 @media only screen and (min-width: 690px) {
   .welcome-text.welcome-text1.welcome-text2.welcome-text3{
     font-size: 70px;
@@ -366,5 +366,6 @@ export default {
     height: 70vh;
   }
 }
+
 </style>
 
