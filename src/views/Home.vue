@@ -73,13 +73,14 @@ import InkTran from "../components/InkBlotTransition2.vue"
 var image1 = require("../assets/never.jpg");
 var image2= null;
 export default {
+    name:"Home",
     components : {typewriter, Popup, AnswerPage, InkTran},
     data: () => ({
         dialog: false,
         text: "Easter Egg Hunt",
         loaded: false,
         animating: false,
-        verdict: "Accepted",
+        verdict: "Wrong",
         desc : "they ask you how you are, and you just have to say you’re fine when you’re not really fine, but you just can’t get into it, because they would never understand.",
         image: image1,
         UpdtAns: false
