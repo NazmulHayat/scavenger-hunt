@@ -2,10 +2,10 @@
     <div>
       <div id="answer-content">
         <AnswerPage
-        verdict="Accepted"
+        :verdict="verdict"
         :desc="desc"
-        :image="image"
-        id="anspg"
+        :img="image"
+        :Updt="UpdtAns"
         />
         <v-btn fab class="close-btn" @click="CloseAnswer()" small>
           <v-icon>mdi-close</v-icon>
@@ -46,7 +46,6 @@
             </v-form>
             <div class="amra pt-10" style="display:flex; justify-content:center">
               <button type="button" @click="submit()" class="button69 font-weight-bold" x-large>
-                 <!-- <i class="loading fa fa-refresh fa-spin"></i> -->
                  <div class="btn-cont">
                   <v-progress-circular
                     indeterminate
@@ -71,6 +70,8 @@ import typewriter from '../components/typewriter.vue'
 import Popup from '../components/Popup.vue'
 import AnswerPage from "../components/AnswerPage.vue"
 import InkTran from "../components/InkBlotTransition2.vue"
+var image1 = require("../assets/never.jpg");
+var image2= null;
 export default {
     components : {typewriter, Popup, AnswerPage, InkTran},
     data: () => ({
@@ -78,32 +79,39 @@ export default {
         text: "Easter Egg Hunt",
         loaded: false,
         animating: false,
-        verdict:"Accepted",
-        desc:"Never gonna give you up, never gonna let you down",
-        image: require("../assets/never.jpg")
+        verdict: "Accepted",
+        desc : "they ask you how you are, and you just have to say you’re fine when you’re not really fine, but you just can’t get into it, because they would never understand.",
+        image: image1,
+        UpdtAns: false
     }),
     methods: {
       submit() {
         if(this.animating) return; // allow only one submit
         this.animating = true;
-        //Start Loading Data
-        document.getElementById('anspg').dispatchEvent(new Event("ChangeMeme"));
+        //Show User Data Loading
         document.getElementsByClassName('loading')[0].classList.add("visible");
         document.getElementsByClassName('inside-text')[0].style.visibility = "hidden";
-        
+
+        //Start Loading Data
+        if(this.verdict=="Accepted") this.image=(this.image==image1?image2:image1);
+        this.UpdtAns=!this.UpdtAns;
+
         setTimeout(()=>{
           //Data loading finished
-          document.getElementsByClassName('loading')[0].classList.remove("visible");
-          document.getElementsByClassName('inside-text')[0].style.visibility = "visible";
-          let ink = document.getElementsByClassName("ink")[0];
-
-          ink.addEventListener("transitionend",()=>{ //add lisnter b4 transition
-            this.animating = false;
-            document.getElementById('answer-content').classList.add('visible'); //Finally show data
-          },{once:true});
-
-          ink.dispatchEvent(new Event("StartTransition"));
+          this.DataLoaded();
         }, 2000)
+      },
+      DataLoaded(){
+        document.getElementsByClassName('loading')[0].classList.remove("visible");
+        document.getElementsByClassName('inside-text')[0].style.visibility = "visible";
+        let ink = document.getElementsByClassName("ink")[0];
+
+        ink.addEventListener("transitionend",()=>{ //add lisnter b4 transition
+          this.animating = false;
+          document.getElementById('answer-content').classList.add('visible'); //Finally show data
+        },{once:true});
+
+        ink.dispatchEvent(new Event("StartTransition"));
       },
       CloseAnswer(){
         if(this.animating) return;
@@ -136,7 +144,6 @@ export default {
 
 
 <style>
-@import "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
 .btn-cont{
   display: flex;
   justify-content: center;
@@ -146,10 +153,6 @@ export default {
   position: absolute;
   top: 16px;
   right:16px;
-}
-.fa {
-  margin-top: 5px;
-  margin-left: -10px;
 }
 
 .loading {

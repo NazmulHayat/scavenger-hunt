@@ -43,9 +43,21 @@ export default {
             type: String,
             default : "Placeholder text"
         },
-        image: {
+        img: {
             type: String,
             default: null
+        },
+        Updt: {
+            type: Boolean,
+            default: false
+        }
+    },
+    computed:{
+        image(){
+            if(this.verdict == "Wrong"){
+                return require('../assets/TryAgainMemes/try' + this.TryCnt +'.jpg');
+            }
+            return this.img;
         }
     },
     data(){
@@ -53,21 +65,21 @@ export default {
             TryCnt:0
         }
     },
-    mounted() {
-        document.getElementsByClassName('for-flexing')[0].addEventListener('ChangeMeme', ()=>{
-            this.asm();
-        })
-    },
-    methods: {
-        asm () {
-            if(this.verdict=="Wrong"){
-                this.image=require('../assets/TryAgainMemes/try' + this.TryCnt +'.jpg');
-                this.TryCnt=(this.TryCnt+1)%8;
-            }
-        }
-    },
+    // mounted() {
+    //     document.getElementsByClassName('for-flexing')[0].addEventListener('ChangeMeme', ()=>{
+    //         this.asm();
+    //     })
+    // },
+    // methods: {
+    //     asm () {
+    //         if(this.verdict=="Wrong"){
+    //             this.image=require('../assets/TryAgainMemes/try' + this.TryCnt +'.jpg');
+    //             this.TryCnt=(this.TryCnt+1)%8;
+    //         }
+    //     }
+    // },
     watch:{
-        image: (val)=>{
+        image:function(val){
             if(val==null){
                 document.getElementsByClassName("card-body")[0]
                     .classList.add("noimage");
@@ -75,6 +87,11 @@ export default {
             else{
                 document.getElementsByClassName("card-body")[0]
                     .classList.remove("noimage");
+            }
+        },
+        Updt:function(){
+            if(this.verdict=="Wrong"){
+                this.TryCnt=(this.TryCnt+1)%8;
             }
         }
     }
@@ -98,7 +115,7 @@ export default {
 .card-body{
     width: 600px;
     height: 350px;
-    overflow: scroll;
+    overflow: auto;
 }
 .card-body.noimage{
     height: auto;

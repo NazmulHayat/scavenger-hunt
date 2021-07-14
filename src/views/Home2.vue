@@ -5,8 +5,8 @@
         <AnswerPage
         :verdict="verdict"
         :desc="desc"
-        :image="image"
-        id="anspg"
+        :img="image"
+        :Updt="UpdtAns"
         />
     </div>
 </template>
@@ -24,13 +24,13 @@ export default {
             verdict: "Accepted",
             desc : "they ask you how you are, and you just have to say you’re fine when you’re not really fine, but you just can’t get into it, because they would never understand.",
             image: image1,
+            UpdtAns: false
         }
     },
     methods:{
         run(){
             if(this.verdict=="Accepted") this.image=(this.image==image1?image2:image1);
-            document.getElementById("anspg").dispatchEvent(new Event("ChangeMeme"));
-
+            this.UpdtAns=!this.UpdtAns;
         },
         Change(){
             this.verdict=(this.verdict=="Accepted"?"Wrong":"Accepted");
