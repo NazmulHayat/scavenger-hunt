@@ -2,13 +2,13 @@
     <div>
       <div id="answer-content">
         <AnswerPage
-        :verdict="verdict"
+        verdict="Accepted"
         :desc="desc"
         :image="image"
-        id="namdao"
+        id="anspg"
         />
-        <v-btn fab class="close-btn" @click="CloseAnswer()">
-          <v-icon large>mdi-close</v-icon>
+        <v-btn fab class="close-btn" @click="CloseAnswer()" small>
+          <v-icon>mdi-close</v-icon>
         </v-btn>
       </div>
       <InkTran class="ink"/>
@@ -23,12 +23,12 @@
           ">Easter Egg Hunt</div>
           </typewriter>
       </div>
-      <v-container class="pp d-flex flex-column justify-center
+      <v-container class="pp px-6 d-flex flex-column justify-center
             " fluid>
       <v-card
         class="main-body
         px-5 py-4
-        
+        px-md-8 px-md-10
         "
         outlined color="transparent" elevation="24">
         <v-row align="center" dense
@@ -70,7 +70,7 @@
 import typewriter from '../components/typewriter.vue' 
 import Popup from '../components/Popup.vue'
 import AnswerPage from "../components/AnswerPage.vue"
-import InkTran from "../components/InkBlotTransition.vue"
+import InkTran from "../components/InkBlotTransition2.vue"
 export default {
     components : {typewriter, Popup, AnswerPage, InkTran},
     data: () => ({
@@ -87,7 +87,7 @@ export default {
         if(this.animating) return; // allow only one submit
         this.animating = true;
         //Start Loading Data
-        document.getElementById('namdao').dispatchEvent(new Event("change"));
+        document.getElementById('anspg').dispatchEvent(new Event("ChangeMeme"));
         document.getElementsByClassName('loading')[0].classList.add("visible");
         document.getElementsByClassName('inside-text')[0].style.visibility = "hidden";
         
@@ -171,7 +171,7 @@ export default {
   opacity: 0;
   transition: visibility 0.5s, opacity 0.5s;
   transition-timing-function: ease-out;
-  background-image: url("../assets/img/modal-bg.jpg");
+  background-image: url("../assets/modal-bg.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -328,10 +328,8 @@ export default {
 
 .welcome-text.welcome-text1.welcome-text2.welcome-text3{
     font-family: Freshman !important;
-    /* font-family: 'Lobster Two', cursive; */
-    font-size: 60px;
-    color: black
-    /* font-family: im fell double pica,serif !important; */
+    font-size: 50px;
+    color: black;
 }
 
 @keyframes blinking {
@@ -343,6 +341,13 @@ export default {
     animation: blinking 0.5s steps(2,jump-none) 0s infinite alternate !important;
 }
 
+
+  
+@media only screen and (min-width: 580px) {
+  .welcome-text.welcome-text1.welcome-text2.welcome-text3{
+    font-size: 60px;
+  }
+}
 @media only screen and (min-width: 690px) {
   .welcome-text.welcome-text1.welcome-text2.welcome-text3{
     font-size: 70px;
@@ -359,6 +364,7 @@ export default {
 }
 
 @media only screen and (max-height: 590px) {
+  
   .pp{
     position:initial;
     top:initial;

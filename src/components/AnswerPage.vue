@@ -1,20 +1,21 @@
 <template>
     <div class="for-flexing">
-        <v-card class="card-body pa-8" elevation="24">
-            <div class="verdict text-h3 font-weight-bold pb-4">Verdict: 
-                <span v-if="verdict=='Accepted'" class="green--text text--darken-3">Accepted</span>
-                <span v-else class="red--text text--darken-3">{{verdict}}</span>
+        <v-card class="card-body 
+                        pa-6" elevation="24">
+            <div id="child-1" class="text-h4
+                    pb-2
+                    font-weight-bold
+                    text-center">Verdict: 
+            <span v-if="verdict=='Accepted'" class="green--text text--darken-3">Accepted</span>
+            <span v-else class="red--text text--darken-3">{{verdict}}</span>
             </div>
-            <div class="msg">
-                <span v-if="verdict=='Wrong'" class="text-h4 text--darken-2"> 
-                    <v-img class="img mt-4" v-bind:src='bleh' contain></v-img>
-                </span>
-                <span v-else class="text-h4 text--darken-2"> 
-                    <div> {{desc}} </div>
-                    <span v-if="image!=null">
-                        <v-img class="img mt-4" contain :src='image'></v-img>
-                    </span>
-                </span>
+            
+            <div id="child-2" class="text-body-1 text-center">{{desc}}</div>
+            <div v-if="verdict=='Wrong'" class="img">
+                <!-- <v-img :src='bleh' contain></v-img> -->
+            </div>
+            <div id="child-3" v-else-if="image!=null" class="img12">
+                <v-img :src='image'></v-img>
             </div>
         </v-card>
     </div>
@@ -47,29 +48,20 @@ export default {
                 'Try a bit harder',
                 "Keep trying, you are gonna make it"
             ],
-            bleh: null
-        }
-    },
-    copmuted:{
-
-        text: function(){
-            console.log("askdfjhaksdhjf");
-            return this.TryAgainTxt[Math.trunc(Math.random() * this.TryAgainTxt.length)]
-        },
-        rand_tries: function(){
-            console.log('../assets/try' + Math.trunc(Math.random() * (7) + 1) + '.jpg');
-            return require('../assets/try' + Math.trunc(Math.random() * (7) + 1) + '.jpg');
+            bleh: null,
+            TryCnt:0
         }
     },
     mounted() {
-        document.getElementsByClassName('for-flexing')[0].addEventListener('change', ()=>{
+        document.getElementsByClassName('for-flexing')[0].addEventListener('ChangeMeme', ()=>{
             this.asm();
         })
     },
     methods: {
         asm () {
-            this.bleh = require('../assets/try' + Math.trunc(Math.random() * (7) + 1) + '.jpg');
-        }
+            this.bleh = require('../assets/TryAgainMemes/try' + this.TryCnt +'.jpg' );
+            this.TryCnt=(this.TryCnt+1)%8;
+        }   
     }
 }
 </script>
@@ -81,30 +73,20 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: 100%;
     }
 
     .card-body{
-        max-width: 600px;
-        margin: auto;
-        /* margin-top: 20vh;  */
-        /* cant center vertically :)   */
-
+        display: flex;
+        flex-direction: column;
+        max-width: 600px !important;
+        max-height: 300px;
     }
-
-    .verdict{
-        text-align: center;
-    }
-
-    .IMAGE{
-        height: 400px;
-        max-width: 100%;
-        align-self: flex-start;
-        /* padding-bottom: 2vh; */
-    }
-
-    .msg{
-        text-align: center;
+    .img12{
+        /* flex-grow: 1; */
+        /* max-width: 300px; */
+        /* justify-content: center; */
+        align-self: center;
     }
 
 </style>
