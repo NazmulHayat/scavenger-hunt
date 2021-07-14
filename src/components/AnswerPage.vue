@@ -1,22 +1,28 @@
 <template>
-    <div class="for-flexing">
-        <v-card class="card-body 
-                        pa-6" elevation="24">
+    <div class="for-flexing
+    px-3 py-16
+    px-sm-6">
+        <v-card class="card-body
+        px-3 py-3
+        px-sm-6 py-sm-4
+        " elevation="24">
             <div class="contt">
-                <div class="text-h4
-                        pb-2
-                        font-weight-bold
-                        text-center">Verdict: 
-                <span v-if="verdict=='Accepted'" class="green--text text--darken-3">Accepted</span>
-                <span v-else class="red--text text--darken-3">{{verdict}}</span>
+                <div class="
+                pb-4
+                ">
+                    <div class="verdict
+                            pb-2
+                            font-weight-bold
+                            text-center">Verdict: 
+                    <span v-if="verdict=='Accepted'" class="green--text text--darken-3">Accepted</span>
+                    <span v-else class="red--text text--darken-3">{{verdict}}</span>
+                    </div>
+                    <div class="desc text-center">{{desc}}</div>
                 </div>
-                
-                <div class="text-body-1 text-center">{{desc}}</div>
-                <div v-if="verdict=='Wrong'" class="img">
-                    <!-- <v-img :src='bleh' contain></v-img> -->
-                </div>
-                <div v-else-if="image!=null" class="img">
-                    <v-img contain :src='image'></v-img>
+                <div v-if="image!=null" class="img-cont
+                pb-2
+                ">
+                    <img class="img" :src="image" id="CorImg">
                 </div>
             </div>
         </v-card>
@@ -44,13 +50,6 @@ export default {
     },
     data(){
         return {
-            TryAgainTxt: [
-                'You can do this!',
-                'Try Again',
-                'Try a bit harder',
-                "Keep trying, you are gonna make it"
-            ],
-            bleh: null,
             TryCnt:0
         }
     },
@@ -61,8 +60,22 @@ export default {
     },
     methods: {
         asm () {
-            this.bleh = require('../assets/TryAgainMemes/try' + this.TryCnt +'.jpg' );
-            this.TryCnt=(this.TryCnt+1)%8;
+            if(this.verdict=="Wrong"){
+                this.image=require('../assets/TryAgainMemes/try' + this.TryCnt +'.jpg');
+                this.TryCnt=(this.TryCnt+1)%8;
+            }
+        }
+    },
+    watch:{
+        image: (val)=>{
+            if(val==null){
+                document.getElementsByClassName("card-body")[0]
+                    .classList.add("noimage");
+            }
+            else{
+                document.getElementsByClassName("card-body")[0]
+                    .classList.remove("noimage");
+            }
         }
     }
 }
@@ -71,25 +84,105 @@ export default {
 
 <style>
 
-    .for-flexing{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100%;
+.for-flexing{
+    position: absolute;
+    top:0;
+    left:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width:100%;
+}
+
+.card-body{
+    width: 600px;
+    height: 350px;
+    overflow: scroll;
+}
+.card-body.noimage{
+    height: auto;
+    max-height: 350px;
+}
+.contt{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.img-cont{
+    min-height:0;
+    flex: 1 1 auto;
+    align-content: center;
+}
+.img{
+    min-height: 100px;
+    max-height:100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.verdict{
+    font-size:32px;
+}
+
+.desc{
+    font-size: 16px;
+}
+
+@media only screen and (min-width: 600px) {
+
+    .desc{
+        font-size: 18px;
+    }
+}
+
+@media only screen and (min-width: 900px) {
+    .verdict{
+        font-size:40px;
     }
 
+    .desc{
+        font-size: 20px;
+    }
     .card-body{
-        max-width: 600px;
-        max-height: 300px;
+        width: 700px;
+        height: 400px;
     }
-    .img{
-        flex-grow: 1;
+    .card-body.noimage{
+        max-height: 400px;
     }
-    .contt{
-        display: flex;
-        flex-direction: column;
-        max-width: 600px;
-        max-height: 300px;
+}
+@media only screen and (min-width: 1100px) {
+    .verdict{
+        font-size:50px;
     }
 
+    .desc{
+        font-size: 25px;
+    }
+    .card-body{
+        width: 800px;
+        height: 450px;
+    }
+    .card-body.noimage{
+        max-height: 450px;
+    }
+}
+@media only screen and (min-width: 1500px) {
+    .verdict{
+        font-size:58px;
+    }
+
+    .desc{
+        font-size: 27px;
+    }
+    .card-body{
+        width: 1000px;
+        height: 500px;
+    }
+    .card-body.noimage{
+        max-height: 500px;
+    }
+}
 </style>
