@@ -36,11 +36,11 @@
           <v-col>
             <v-form class="FORM">
               <div class="form__group field">
-                <input type="input" class="form__field" autocomplete="off" placeholder="Name" name="name" id='name' required />
+                <input type="input" class="form__field" autocomplete="off" placeholder="Name" name="name" id='name' required v-model="uid"/>
                 <label for="name" class="form__label">Your ID:</label>
               </div>
               <div class="form__group field">
-                <input type="input" class="form__field" autocomplete="off" placeholder="Name" name="name" id='name' required />
+                <input type="input" class="form__field" autocomplete="off" placeholder="Name" name="name" id='name' required v-model="ans"/>
                 <label for="name" class="form__label">Answer</label>
               </div>
             </v-form>
@@ -70,19 +70,19 @@ import typewriter from '../components/typewriter.vue'
 import Popup from '../components/Popup.vue'
 import AnswerPage from "../components/AnswerPage.vue"
 import InkTran from "../components/InkBlotTransition2.vue"
-var image1 = require("../assets/never.jpg");
-var image2= null;
 export default {
     name:"Home",
     components : {typewriter, Popup, AnswerPage, InkTran},
     data: () => ({
+        uid:"",
+        ans:"",
         dialog: false,
         text: "Easter Egg Hunt",
         loaded: false,
         animating: false,
         verdict: "Wrong",
-        desc : "they ask you how you are, and you just have to say you’re fine when you’re not really fine, but you just can’t get into it, because they would never understand.",
-        image: image1,
+        desc : "",
+        image: null,
         UpdtAns: false
     }),
     methods: {
@@ -94,13 +94,27 @@ export default {
         document.getElementsByClassName('inside-text')[0].style.visibility = "hidden";
 
         //Start Loading Data
-        if(this.verdict=="Accepted") this.image=(this.image==image1?image2:image1);
-        this.UpdtAns=!this.UpdtAns;
-
-        setTimeout(()=>{
-          //Data loading finished
+        var apibody = {
+          uid: this.uid,
+          ans: this.ans
+        }
+        fetch("https://easter-egg-api.herokuapp.com/easter-egg-hunt",{
+          method: "PATCH",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(apibody)
+        })
+        .then((data)=>{return data.json()})
+        .then((res)=>{
+          this.verdict=res.verdict;
+          this.desc=res.message;
+          var vuesux=false;
+          if(res.image!=null && vuesux)
+            this.image=require(res.image);
+          else this.image=null;
           this.DataLoaded();
-        }, 2000)
+        }) 
       },
       DataLoaded(){
         document.getElementsByClassName('loading')[0].classList.remove("visible");
