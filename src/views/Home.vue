@@ -128,9 +128,7 @@ export default {
         .then((res)=>{
           this.verdict=res.verdict;
           this.desc=res.message;
-          // if(res.image!=null && vuesux)
-          //   this.image=require(res.image);
-          this.image=null;
+          this.image=res.image;
           this.DataLoaded();
         }) 
       },
