@@ -178,6 +178,12 @@ export default {
     .verdict{
         font-size:58px;
     }
+    .img12{
+        /* flex-grow: 1; */
+        /* max-width: 300px; */
+        /* justify-content: center; */
+        align-self: center;
+    }
 
     .desc{
         font-size: 27px;

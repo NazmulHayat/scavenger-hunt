@@ -27,7 +27,7 @@
             " fluid>
       <v-card
         class="main-body
-        px-5 py-4
+        px-5 py-4 pt-8 
         px-md-8 px-md-10
         "
         outlined color="transparent" elevation="24">
@@ -45,14 +45,14 @@
               ></v-text-field>
               <v-text-field
                 v-model="ans"
-                label="Answer"
-                :rules="rules.required"
+                label="Answer:"
+                required
                 class="text-field"
                 color="black"
                 :readonly="animating"              
               ></v-text-field>
             </v-form>
-            <div class="amra pt-6" style="display:flex; justify-content:center">
+            <div class="amra pt-4 pb-2" style="display:flex; justify-content:center">
               <button type="button" @click="submit()" class="button69 font-weight-bold" x-large>
                  <div class="btn-cont">
                   <v-progress-circular
@@ -61,7 +61,6 @@
                   ></v-progress-circular>
                   <div class="inside-text"> Submit </div>
                  </div>
-                 
               </button>
             </div>
           </v-col>
@@ -190,12 +189,14 @@ export default {
 
 .text-field.theme--dark.v-text-field> .v-input__control > .v-input__slot > .v-text-field__slot > input{
   color:black;
+  font-size : 22px;
   font-weight: 500;
 }
 .v-input.text-field>.v-input__control>.v-input__slot>.v-text-field__slot>.v-label{
   color:black;
   font-size: 20px;
   font-weight: 900;
+  margin-top: -5px;;
 }
 
 
@@ -284,6 +285,8 @@ export default {
   }
 
 @import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital@1&display=swap');
+
+
 
 .button69 {
   background-color: black;
