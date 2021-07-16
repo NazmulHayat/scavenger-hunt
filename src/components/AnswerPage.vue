@@ -37,11 +37,11 @@ export default {
     props: {
         verdict: {
             type : String,
-            default : "Default Verdict"
+            default : "Invalid"
         },
         desc: {
             type: String,
-            default : "Placeholder text"
+            default : ""
         },
         img: {
             type: String,
@@ -65,19 +65,6 @@ export default {
             TryCnt:0
         }
     },
-    // mounted() {
-    //     document.getElementsByClassName('for-flexing')[0].addEventListener('ChangeMeme', ()=>{
-    //         this.asm();
-    //     })
-    // },
-    // methods: {
-    //     asm () {
-    //         if(this.verdict=="Wrong"){
-    //             this.image=require('../assets/TryAgainMemes/try' + this.TryCnt +'.jpg');
-    //             this.TryCnt=(this.TryCnt+1)%8;
-    //         }
-    //     }
-    // },
     watch:{
         image:function(val){
             if(val==null){
@@ -134,6 +121,7 @@ export default {
 .img{
     min-height: 100px;
     max-height:100%;
+    height: 100%;
     display: block;
     margin-left: auto;
     margin-right: auto;

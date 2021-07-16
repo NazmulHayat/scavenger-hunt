@@ -22,7 +22,7 @@ export default {
     data(){
         return {
             verdict: "Accepted",
-            desc : "they ask you how you are, and you just have to say you’re fine when you’re not really fine, but you just can’t get into it, because they would never understand.",
+            desc : "",
             image: image1,
             UpdtAns: false
         }
