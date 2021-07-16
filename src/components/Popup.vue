@@ -15,23 +15,23 @@
 <div class="WordSection1">
 <p class="MsoNormal font-weight-black" align=center style='text-align:center'>
 <u><span lang=EN-US style='font-size:20.0pt;line-height:106%;
-mso-ansi-language:EN-US'>PiHacks Easter Egg Hunt<o:p></o:p></span></u></p>
+mso-ansi-language:EN-US'>PiHacks Easter Egg Hunt</span></u></p>
 
 <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
 style='font-size:12.0pt;line-height:106%;mso-ansi-language:EN-US'>There are
 many easter eggs hidden throughout the event and it’s up to you to find them.
-Look out for this symbol: <o:p></o:p></span></p>
+Look out for this symbol: </span></p>
 
 <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
 style='font-size:12.0pt;line-height:106%;mso-ansi-language:EN-US;mso-no-proof:
 yes'><img width=47 height=65
 src="../assets/egg symbol.png" v:shapes="Picture_x0020_1"></span><span
-lang=EN-US style='font-size:12.0pt;line-height:106%;mso-ansi-language:EN-US'><o:p></o:p></span></p>
+lang=EN-US style='font-size:12.0pt;line-height:106%;mso-ansi-language:EN-US'></span></p>
 
 <p class=MsoNormal align=center style='text-align:center'><span lang=EN-US
 style='font-size:12.0pt;line-height:106%;mso-ansi-language:EN-US'>As this will hint
 you to keep a sharp eye on what’s happening. Once you find the clue, input your
-username and answer in the input box to validate your answer.<o:p></o:p></span></p>
+username and answer in the input box to validate your answer.</span></p>
 
 </div>
         </v-card>
