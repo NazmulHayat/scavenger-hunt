@@ -35,16 +35,22 @@
         justify="center">
           <v-col>
             <v-form class="FORM">
-              <div class="form__group field">
-                <input type="input" class="form__field" autocomplete="off" placeholder="Name" name="name" id='name' required v-model="uid"/>
-                <label for="name" class="form__label">Your ID:</label>
-              </div>
-              <div class="form__group field">
-                <input type="input" class="form__field" autocomplete="off" placeholder="Name" name="name" id='name' required v-model="ans"/>
-                <label for="name" class="form__label">Answer</label>
-              </div>
+              <v-text-field
+                v-model="uid"
+                label="Your ID:"
+                required
+                class="text-field"
+                color="black"                
+              ></v-text-field>
+              <v-text-field
+                v-model="ans"
+                label="Answer"
+                required
+                class="text-field"
+                color="black"                
+              ></v-text-field>
             </v-form>
-            <div class="amra pt-10" style="display:flex; justify-content:center">
+            <div class="amra pt-6" style="display:flex; justify-content:center">
               <button type="button" @click="submit()" class="button69 font-weight-bold" x-large>
                  <div class="btn-cont">
                   <v-progress-circular
@@ -159,6 +165,31 @@ export default {
 
 
 <style>
+.text-field.theme--dark.v-text-field > .v-input__control > .v-input__slot:before{
+  color:black;
+  border-color: black;
+  border-width: 1.25px;
+  background-color: black;
+
+}
+.text-field.theme--dark.v-text-field:not(.v-input--has-state):hover > .v-input__control > .v-input__slot:before{
+  color:black;
+  border-color: black;
+}
+
+.text-field.theme--dark.v-text-field> .v-input__control > .v-input__slot > .v-text-field__slot > input{
+  color:black;
+  font-weight: 500;
+}
+/* .text-field.theme--dark.v-input input, .theme--dark.v-input textarea{
+  color:black;
+} */
+.v-input.text-field>.v-input__control>.v-input__slot>.v-text-field__slot>.v-label{
+  color:black;
+  font-size: 20px;
+  font-weight: 900;
+}
+
 .btn-cont{
   display: flex;
   justify-content: center;
