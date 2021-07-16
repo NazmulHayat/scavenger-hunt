@@ -34,20 +34,22 @@
         <v-row align="center" dense
         justify="center">
           <v-col>
-            <v-form class="FORM">
+            <v-form class="FORM" ref="form">
               <v-text-field
                 v-model="uid"
                 label="Your ID:"
-                required
+                :rules="rules.MinLength"
                 class="text-field"
-                color="black"                
+                color="black"
+                :readonly="animating"                
               ></v-text-field>
               <v-text-field
                 v-model="ans"
                 label="Answer"
-                required
+                :rules="rules.required"
                 class="text-field"
-                color="black"                
+                color="black"
+                :readonly="animating"              
               ></v-text-field>
             </v-form>
             <div class="amra pt-6" style="display:flex; justify-content:center">
@@ -89,10 +91,16 @@ export default {
         verdict: "Wrong",
         desc : "",
         image: null,
-        UpdtAns: false
+        UpdtAns: false,
+        rules: {
+          required:[ v=> !!v || 'Required.'],
+          MinLength: [v=> v.length>=5 || 'Min length of 5.']
+        }
     }),
     methods: {
       submit() {
+        //validations
+        if(!this.$refs.form.validate()) return;
         if(this.animating) return; // allow only one submit
         this.animating = true;
         //Show User Data Loading
@@ -111,14 +119,18 @@ export default {
           },
           body: JSON.stringify(apibody)
         })
-        .then((data)=>{return data.json()})
+        .then((data)=>{
+          if(data.status==200 && typeof(Storage) != undefined){
+            localStorage.uid=this.uid;
+          }
+          return data.json();
+        })
         .then((res)=>{
           this.verdict=res.verdict;
           this.desc=res.message;
-          var vuesux=false;
-          if(res.image!=null && vuesux)
-            this.image=require(res.image);
-          else this.image=null;
+          // if(res.image!=null && vuesux)
+          //   this.image=require(res.image);
+          this.image=null;
           this.DataLoaded();
         }) 
       },
@@ -147,45 +159,69 @@ export default {
         AnswerContent.addEventListener("transitionend",tempFunc)//add lisnter b4 transition
         document.getElementById('answer-content').classList.remove('visible');
       }
+    },
+    mounted(){
+      if(typeof(Storage) != undefined){
+        if(localStorage.uid) this.uid=localStorage.uid;
+      }
     }
 }
-
-// function media1200(x) {
-//   if(x.matches) {
-//     console.log("REACHED 1200px");
-//     this.text = "Easter Egg Hunt";
-//   }
-// }
-
-// var x = window.matchMedia("(max-width: 1200px)")
-// media1200(x) // Call listener function at run time
-// x.addListener(media1200);
-
 </script>
 
 
 <style>
-.text-field.theme--dark.v-text-field > .v-input__control > .v-input__slot:before{
+/* click korle je animation */
+.text-field.theme--dark.v-input{
   color:black;
-  border-color: black;
+}
+/* default */
+.text-field.theme--dark.v-text-field > .v-input__control > .v-input__slot:before{
+  color:rgba(53, 53, 53, 0.5);
+  border-color: rgba(53, 53, 53, 0.5);
   border-width: 1.25px;
-  background-color: black;
+  background-color: rgba(53, 53, 53, 0.5);
 
 }
+/* hover korle */
 .text-field.theme--dark.v-text-field:not(.v-input--has-state):hover > .v-input__control > .v-input__slot:before{
-  color:black;
-  border-color: black;
+  color:rgba(53, 53, 53, 0.5);
+  border-color: rgba(53, 53, 53, 0.5);
+  border-width: 1.25px;
+  background-color: rgba(53, 53, 53, 0.5);
 }
 
 .text-field.theme--dark.v-text-field> .v-input__control > .v-input__slot > .v-text-field__slot > input{
   color:black;
   font-weight: 500;
 }
-/* .text-field.theme--dark.v-input input, .theme--dark.v-input textarea{
-  color:black;
-} */
 .v-input.text-field>.v-input__control>.v-input__slot>.v-text-field__slot>.v-label{
   color:black;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+
+/* Error texts */
+.text-field.error--text.theme--dark.v-text-field > .v-input__control > .v-input__slot:before{
+  color:rgba(53, 53, 53, 0.5);
+  border-color: rgba(53, 53, 53, 0.5);
+  border-width: 1.25px;
+  background-color: rgba(53, 53, 53, 0.5);
+
+}
+.text-field.error--text.theme--dark.v-text-field:not(.v-input--has-state):hover > .v-input__control > .v-input__slot:before{
+  color:rgba(53, 53, 53, 0.5);
+  border-color: rgba(53, 53, 53, 0.5);
+  border-width: 1.25px;
+  background-color: rgba(53, 53, 53, 0.5);
+}
+
+.text-field.error--text.error--text.theme--dark.v-text-field> .v-input__control > .v-input__slot > .v-text-field__slot > input{
+  color:#000000;
+  font-weight: 500;
+}
+.v-input.text-field.error--text>.v-input__control>.v-input__slot>.v-text-field__slot>.v-label{
+  color:#000000 !important;
   font-size: 20px;
   font-weight: 900;
 }
@@ -302,7 +338,7 @@ export default {
 
 .pp{
   height: 100%;
-  position:fixed;
+  position:absolute;
   top:0;
   left:0;
 }
