@@ -87,7 +87,6 @@ export default {
 
 
 <style>
-
 .for-flexing{
     position: absolute;
     top:0;
@@ -98,7 +97,6 @@ export default {
     height: 100%;
     width:100%;
 }
-
 .card-body{
     width: 600px;
     height: 350px;
@@ -126,27 +124,21 @@ export default {
     margin-left: auto;
     margin-right: auto;
 }
-
 .verdict{
     font-size:32px;
 }
-
 .desc{
     font-size: 16px;
 }
-
 @media only screen and (min-width: 600px) {
-
     .desc{
         font-size: 18px;
     }
 }
-
 @media only screen and (min-width: 900px) {
     .verdict{
         font-size:40px;
     }
-
     .desc{
         font-size: 20px;
     }
@@ -162,7 +154,6 @@ export default {
     .verdict{
         font-size:50px;
     }
-
     .desc{
         font-size: 25px;
     }
@@ -184,7 +175,6 @@ export default {
         /* justify-content: center; */
         align-self: center;
     }
-
     .desc{
         font-size: 27px;
     }

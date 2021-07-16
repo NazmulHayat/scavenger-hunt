@@ -46,7 +46,7 @@
               <v-text-field
                 v-model="ans"
                 label="Answer:"
-                required
+                :rules="rules.required"
                 class="text-field"
                 color="black"
                 :readonly="animating"              
