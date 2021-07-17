@@ -1,239 +1,313 @@
 <template>
-    <div>
-      <div id="answer-content">
-        <AnswerPage
+  <div>
+    <div id="answer-content">
+      <AnswerPage
         :verdict="verdict"
         :desc="desc"
         :img="image"
         :Updt="UpdtAns"
-        />
-        <v-btn fab class="close-btn" @click="CloseAnswer()" small>
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </div>
-      <InkTran class="ink"/>
-      <div class="text-main">
-          <typewriter
-          :type-interval="100"
-          :replace-interval="1000"
-          class="typewriter pt-2"
-          >
-          <div class="welcome-text welcome-text1 
-          welcome-text2 welcome-text3
-          ">Easter Egg Hunt</div>
-          </typewriter>
-      </div>
-      <v-container class="pp px-6 d-flex flex-column justify-center
-            " fluid>
+        class="easteranspg"
+      />
+      <v-btn fab class="close-btn" @click="CloseAnswer()" small>
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </div>
+    <InkTran class="ink" />
+    <div class="text-main">
+      <typewriter
+        :type-interval="100"
+        :replace-interval="1000"
+        class="typewriter pt-2"
+      >
+        <div class="welcome-text welcome-text1 welcome-text2 welcome-text3">
+          Easter Egg Hunt
+        </div>
+      </typewriter>
+    </div>
+    <v-container class="pp px-6 d-flex flex-column justify-center" fluid>
       <v-card
-        class="main-body
-        px-5 py-4 pt-8 
-        px-md-8 px-md-10
-        "
-        outlined color="transparent" elevation="24">
-        <v-row align="center" dense
-        justify="center">
+        class="main-body px-5 py-4 pt-8 px-md-8 px-md-10"
+        outlined
+        color="transparent"
+        elevation="24"
+      >
+        <v-row align="center" dense justify="center">
           <v-col>
             <v-form class="FORM" ref="form">
               <v-text-field
                 v-model="uid"
                 label="Your ID:"
-                :rules="rules.MinLength"
+                :rules="[...rules.MinLength, ...rules.invalid, UIdCheck]"
                 class="text-field"
                 color="black"
-                :readonly="animating"                
+                :readonly="animating"
               ></v-text-field>
               <v-text-field
                 v-model="ans"
                 label="Answer:"
-                :rules="rules.required"
+                :rules="[...rules.required, ...rules.invalid]"
                 class="text-field"
                 color="black"
-                :readonly="animating"              
+                :readonly="animating"
               ></v-text-field>
             </v-form>
-            <div class="amra pt-4 pb-2" style="display:flex; justify-content:center">
-              <button type="button" @click="submit()" class="button69 font-weight-bold" x-large>
-                 <div class="btn-cont">
+            <div
+              class="amra pt-4 pb-2"
+              style="display: flex; justify-content: center"
+            >
+              <button
+                type="button"
+                @click="submit()"
+                class="button69 font-weight-bold"
+                x-large
+              >
+                <div class="btn-cont">
                   <v-progress-circular
                     indeterminate
                     class="loading"
                   ></v-progress-circular>
-                  <div class="inside-text"> Submit </div>
-                 </div>
+                  <div class="inside-text">Submit</div>
+                </div>
               </button>
             </div>
           </v-col>
         </v-row>
-        
-      </v-card> 
-      </v-container>
-        <Popup />
-    </div>
+      </v-card>
+    </v-container>
+    <Popup />
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="3000"
+    >{{errormsg}}</v-snackbar>
+  </div>
 </template>
 
 <script>
-import typewriter from '../components/typewriter.vue' 
-import Popup from '../components/Popup.vue'
-import AnswerPage from "../components/AnswerPage.vue"
-import InkTran from "../components/InkBlotTransition2.vue"
+import typewriter from "../components/typewriter.vue";
+import Popup from "../components/Popup.vue";
+import AnswerPage from "../components/AnswerPage.vue";
+import InkTran from "../components/InkBlotTransition2.vue";
 export default {
-    name:"Home",
-    components : {typewriter, Popup, AnswerPage, InkTran},
-    data: () => ({
-        uid:"",
-        ans:"",
-        dialog: false,
-        text: "Easter Egg Hunt",
-        loaded: false,
-        animating: false,
-        verdict: "Wrong",
-        desc : "",
-        image: null,
-        UpdtAns: false,
-        rules: {
-          required:[ v=> !!v || 'Required.'],
-          MinLength: [v=> v.length>=5 || 'Min length of 5.']
-        }
-    }),
-    methods: {
-      submit() {
-        //validations
-        if(!this.$refs.form.validate()) return;
-        if(this.animating) return; // allow only one submit
-        this.animating = true;
-        //Show User Data Loading
-        document.getElementsByClassName('loading')[0].classList.add("visible");
-        document.getElementsByClassName('inside-text')[0].style.visibility = "hidden";
+  name: "Home",
+  components: { typewriter, Popup, AnswerPage, InkTran },
+  data: () => ({
+    uid: "",
+    ans: "",
+    uidisInvalid:false,
+    invaliduid:"",
+    dialog: false,
+    text: "Easter Egg Hunt",
+    loaded: false,
+    animating: false,
+    verdict: "Wrong",
+    desc: "",
+    image: null,
+    UpdtAns: false,
+    errormsg : "",
+    snackbar : false,
+    rules: {
+      required: [(v) => !!v || "Required."],
+      MinLength: [(v) => v.length >= 5 || "Min length of 5."],
+      invalid: [
+        (v) =>
+          /^((?![.#$[\]"']).)*$/.test(v) || "input contains invalid characters",
+      ]
+    },
+  }),
+  methods: {
+    UIdCheck(v){
+      if(v==this.invaliduid && this.uidisInvalid) return "The given User ID is invalid";
+      return true;
 
-        //Start Loading Data
-        var apibody = {
-          uid: this.uid,
-          ans: this.ans
-        }
-        fetch("https://easter-egg-api.herokuapp.com/easter-egg-hunt",{
-          method: "PATCH",
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(apibody)
-        })
-        .then((data)=>{
-          if(data.status==200 && typeof(Storage) != undefined){
-            localStorage.uid=this.uid;
+    },
+    submit() {
+      //validations
+      if (!this.$refs.form.validate()) return;
+      if (this.animating) return; // allow only one submit
+      this.animating = true;
+      //Show User Data Loading
+      document.getElementsByClassName("loading")[0].classList.add("visible");
+      document.getElementsByClassName("inside-text")[0].style.visibility =
+        "hidden";
+
+      //Start Loading Data
+      let apibody = {
+        uid: this.uid,
+        ans: this.ans,
+      };
+      let code=null;
+      fetch("https://easter-egg-api.herokuapp.com/easter-egg-hunt", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(apibody),
+      })
+        .then((data) => {
+          code = data.status;
+          if (data.status == 200 && typeof Storage != undefined) {
+            localStorage.uid = this.uid;
           }
           return data.json();
         })
-        .then((res)=>{
-          this.verdict=res.verdict;
-          this.desc=res.message;
-          this.image=res.image;
-          this.DataLoaded();
-        }) 
-      },
-      DataLoaded(){
-        document.getElementsByClassName('loading')[0].classList.remove("visible");
-        document.getElementsByClassName('inside-text')[0].style.visibility = "visible";
-        let ink = document.getElementsByClassName("ink")[0];
+        .then((res) => {
+          if(code == 418){
+            this.uidisInvalid=true;
+            this.invaliduid=this.uid;
+            this.$refs.form.validate();
+          }
+          if(res.verdict!="Accepted" && res.verdict!="Wrong"){
+            this.errormsg = res.verdict + ": " + res.message;
+            this.snackbar = true;
+            document.getElementsByClassName("loading")[0].classList.remove("visible");
+            document.getElementsByClassName("inside-text")[0].style.visibility =
+              "visible";
+            this.animating = false;
+            return;
+          }
 
-        ink.addEventListener("transitionend",()=>{ //add lisnter b4 transition
-          this.animating = false;
-          document.getElementById('answer-content').classList.add('visible'); //Finally show data
-        },{once:true});
-
-        ink.dispatchEvent(new Event("StartTransition"));
-      },
-      CloseAnswer(){
-        if(this.animating) return;
-        this.animating = true;
-        let AnswerContent = document.getElementById('answer-content');
-        let tempFunc = (e)=>{
-          if(e.target !== e.currentTarget) return;
-          this.animating = false;
-          document.getElementsByClassName("ink")[0].dispatchEvent(new Event("StartTransition"));
-          AnswerContent.removeEventListener("transitionend",tempFunc);
-        }
-        AnswerContent.addEventListener("transitionend",tempFunc)//add lisnter b4 transition
-        document.getElementById('answer-content').classList.remove('visible');
-      }
+          this.verdict = res.verdict;
+          this.desc = res.message;
+          this.image = res.image;
+          document.getElementsByClassName("easteranspg")[0].addEventListener(
+            "ImagesLoaded", () => {
+              this.DataLoaded();
+            }, { once: true });
+          this.UpdtAns = !this.UpdtAns;
+        })
     },
-    mounted(){
-      if(typeof(Storage) != undefined){
-        if(localStorage.uid) this.uid=localStorage.uid;
-      }
+    DataLoaded() {
+      document.getElementsByClassName("loading")[0].classList.remove("visible");
+      document.getElementsByClassName("inside-text")[0].style.visibility =
+        "visible";
+      let ink = document.getElementsByClassName("ink")[0];
+
+      ink.addEventListener(
+        "transitionend",
+        () => {
+          //add lisnter b4 transition
+          this.animating = false;
+          document.getElementById("answer-content").classList.add("visible"); //Finally show data
+        },
+        { once: true }
+      );
+
+      ink.dispatchEvent(new Event("StartTransition"));
+    },
+    CloseAnswer() {
+      if (this.animating) return;
+      this.animating = true;
+      let AnswerContent = document.getElementById("answer-content");
+      let tempFunc = (e) => {
+        if (e.target !== e.currentTarget) return;
+        this.animating = false;
+        document
+          .getElementsByClassName("ink")[0]
+          .dispatchEvent(new Event("StartTransition"));
+        AnswerContent.removeEventListener("transitionend", tempFunc);
+      };
+      AnswerContent.addEventListener("transitionend", tempFunc); //add lisnter b4 transition
+      document.getElementById("answer-content").classList.remove("visible");
+    },
+  },
+  mounted() {
+    if (typeof Storage != undefined) {
+      if (localStorage.uid) this.uid = localStorage.uid;
     }
-}
+  },
+};
 </script>
 
 
 <style>
 /* click korle je animation */
-.text-field.theme--dark.v-input{
-  color:black;
+.text-field.theme--dark.v-input {
+  color: black;
 }
 /* default */
-.text-field.theme--dark.v-text-field > .v-input__control > .v-input__slot:before{
-  color:rgba(53, 53, 53, 0.5);
+.text-field.theme--dark.v-text-field
+  > .v-input__control
+  > .v-input__slot:before {
+  color: rgba(53, 53, 53, 0.5);
   border-color: rgba(53, 53, 53, 0.5);
   border-width: 1.25px;
   background-color: rgba(53, 53, 53, 0.5);
-
 }
 /* hover korle */
-.text-field.theme--dark.v-text-field:not(.v-input--has-state):hover > .v-input__control > .v-input__slot:before{
-  color:rgba(53, 53, 53, 0.5);
+.text-field.theme--dark.v-text-field:not(.v-input--has-state):hover
+  > .v-input__control
+  > .v-input__slot:before {
+  color: rgba(53, 53, 53, 0.5);
   border-color: rgba(53, 53, 53, 0.5);
   border-width: 1.25px;
   background-color: rgba(53, 53, 53, 0.5);
 }
 
-.text-field.theme--dark.v-text-field> .v-input__control > .v-input__slot > .v-text-field__slot > input{
-  color:black;
-  font-size : 22px;
+.text-field.theme--dark.v-text-field
+  > .v-input__control
+  > .v-input__slot
+  > .v-text-field__slot
+  > input {
+  color: black;
+  font-size: 22px;
   font-weight: 500;
 }
-.v-input.text-field>.v-input__control>.v-input__slot>.v-text-field__slot>.v-label{
-  color:black;
+.v-input.text-field
+  > .v-input__control
+  > .v-input__slot
+  > .v-text-field__slot
+  > .v-label {
+  color: black;
   font-size: 20px;
   font-weight: 900;
-  margin-top: -5px;;
+  margin-top: -5px;
 }
-
 
 /* Error texts */
-.text-field.error--text.theme--dark.v-text-field > .v-input__control > .v-input__slot:before{
-  color:rgba(53, 53, 53, 0.5);
-  border-color: rgba(53, 53, 53, 0.5);
-  border-width: 1.25px;
-  background-color: rgba(53, 53, 53, 0.5);
-
-}
-.text-field.error--text.theme--dark.v-text-field:not(.v-input--has-state):hover > .v-input__control > .v-input__slot:before{
-  color:rgba(53, 53, 53, 0.5);
+.text-field.error--text.theme--dark.v-text-field
+  > .v-input__control
+  > .v-input__slot:before {
+  color: rgba(53, 53, 53, 0.5);
   border-color: rgba(53, 53, 53, 0.5);
   border-width: 1.25px;
   background-color: rgba(53, 53, 53, 0.5);
 }
+.text-field.error--text.theme--dark.v-text-field:not(.v-input--has-state):hover
+  > .v-input__control
+  > .v-input__slot:before {
+  color: rgba(53, 53, 53, 0.5);
+  border-color: rgba(53, 53, 53, 0.5);
+  border-width: 1.25px;
+  background-color: rgba(53, 53, 53, 0.5);
+}
 
-.text-field.error--text.error--text.theme--dark.v-text-field> .v-input__control > .v-input__slot > .v-text-field__slot > input{
-  color:#000000;
+.text-field.error--text.error--text.theme--dark.v-text-field
+  > .v-input__control
+  > .v-input__slot
+  > .v-text-field__slot
+  > input {
+  color: #000000;
   font-weight: 500;
 }
-.v-input.text-field.error--text>.v-input__control>.v-input__slot>.v-text-field__slot>.v-label{
-  color:#000000 !important;
+.v-input.text-field.error--text
+  > .v-input__control
+  > .v-input__slot
+  > .v-text-field__slot
+  > .v-label {
+  color: #000000 !important;
   font-size: 20px;
   font-weight: 900;
 }
 
-.btn-cont{
+.btn-cont {
   display: flex;
   justify-content: center;
 }
 
-.close-btn{
+.close-btn {
   position: absolute;
   top: 16px;
-  right:16px;
+  right: 16px;
 }
 
 .loading {
@@ -246,10 +320,10 @@ export default {
   opacity: 1;
 }
 
-#answer-content{
+#answer-content {
   position: fixed;
   height: 100%;
-  width:100%;
+  width: 100%;
   z-index: 4;
   visibility: hidden;
   opacity: 0;
@@ -260,32 +334,29 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
 }
-.ink{
+.ink {
   z-index: 3;
 }
 
-#answer-content.visible{
+#answer-content.visible {
   visibility: visible;
   opacity: 1;
 }
 
-  @keyframes transitionIn {
-    from {
-      opacity: 0;
-      transform: translateY(200px);
-    }
-    to{
-      opacity: 1;
-      transform: translateY(0);
-    }
+@keyframes transitionIn {
+  from {
+    opacity: 0;
+    transform: translateY(200px);
   }
-
-  .main-body{
-    animation: transitionIn 1.5s;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-@import url('https://fonts.googleapis.com/css2?family=Lobster+Two:ital@1&display=swap');
-
+.main-body {
+  animation: transitionIn 1.5s;
+}
 
 
 .button69 {
@@ -295,112 +366,94 @@ export default {
   height: auto;
   font-size: 22px;
   /* font-family: 'Press Start 2P', cursive; */
-  font-family:sans-serif;
+  font-family: sans-serif;
   /* border: 1px solid #ffffff; */
-      background-color: #352a2a;
-    color: rgb(255, 255, 255);
+  background-color: #352a2a;
+  color: rgb(255, 255, 255);
   border-radius: 30px 30px 30px 30px;
   /* margin-bottom: 20px; */
 }
 .button69:hover {
-    background-color: #000000;
-    color: rgb(255, 255, 255);
+  background-color: #000000;
+  color: rgb(255, 255, 255);
 }
 
-@font-face{
-  font-family: 'Amithen';
-  src: url(../assets/Amithen.ttf);
+@font-face {
+  font-family: "Freshman";
+  src: url("../assets/Freshman.ttf");
 }
 
-@font-face{
-  font-family: 'Freshman';
-  src: url(../assets/Freshman.ttf);
-}
-
-@font-face{
-    font-family: 'Cream';
-    src: url(../assets/Cream_Cake.otf);
-}
-
-@font-face{
-    font-family: 'Vintage';
-    src: url(../assets/vintage.otf);
-}
-
-.main-body{
-  width:100%;
+.main-body {
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
-  max-width:700px;
-  
+  max-width: 700px;
 }
 
-
-
-.pp{
+.pp {
   height: 100%;
-  position:absolute;
-  top:0;
-  left:0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-.answer{
+.answer {
   outline: 3px solid black;
 }
 
-.text-main{
-    display: flex;
-    padding: 20px;
-    justify-content: center;
-    text-align: center;
+.text-main {
+  display: flex;
+  padding: 20px;
+  justify-content: center;
+  text-align: center;
 }
 
-.welcome-text.welcome-text1.welcome-text2.welcome-text3{
-    font-family: Freshman !important;
-    font-size: 50px;
-    color: black;
+.welcome-text.welcome-text1.welcome-text2.welcome-text3 {
+  font-family: Freshman !important;
+  font-size: 50px;
+  color: black;
 }
 
 @keyframes blinking {
-    0%{opacity:0;}
-    100%{opacity: 0;}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .typewriter.content *:last-child::after {
-    animation: blinking 0.5s steps(2,jump-none) 0s infinite alternate !important;
+  animation: blinking 0.5s steps(2, jump-none) 0s infinite alternate !important;
 }
 
-
-  
 @media only screen and (min-width: 580px) {
-  .welcome-text.welcome-text1.welcome-text2.welcome-text3{
+  .welcome-text.welcome-text1.welcome-text2.welcome-text3 {
     font-size: 60px;
   }
 }
 @media only screen and (min-width: 690px) {
-  .welcome-text.welcome-text1.welcome-text2.welcome-text3{
+  .welcome-text.welcome-text1.welcome-text2.welcome-text3 {
     font-size: 70px;
   }
 }
 
 @media only screen and (min-width: 1000px) {
-  .main-body{
+  .main-body {
     max-width: 800px;
   }
-  .welcome-text.welcome-text1.welcome-text2.welcome-text3{
+  .welcome-text.welcome-text1.welcome-text2.welcome-text3 {
     font-size: 80px;
   }
 }
 
 @media only screen and (max-height: 590px) {
-  
-  .pp{
-    position:initial;
-    top:initial;
-    left:initial;
+  .pp {
+    position: initial;
+    top: initial;
+    left: initial;
     height: 70vh;
   }
 }
-
 </style>
 
