@@ -81,8 +81,6 @@ export default {
     };
   },
   mounted() {
-    document.getElementById("tran-bg").style.backgroundImage =
-      "url(" + images[frames - 1].src + ")";
     this.el = document.getElementById("transition");
     let canvas = document.getElementById("transition-canvas");
     canvas.style.height = window.screen.height + "px";
@@ -91,6 +89,8 @@ export default {
     canvas.width = window.screen.width;
     this.mntd = true;
     this.el.addEventListener("ImagesLoaded", () => {
+      document.getElementById("tran-bg").style.backgroundImage =
+        "url(" + images[frames - 1].src + ")";
       this.Aloop = new AnimLoop(20, canvas);
       this.evnt = true;
       // this.el.dispatchEvent(new Event("StartTransition"));
@@ -115,13 +115,15 @@ export default {
     }
   },
   created() {
-    for (var i = 0; i < frames; i++) {
-      images[i] = new Image();
-      images[i].onload = this.LoadChecker;
-      images[i].src = require("../assets/TransitionFrames/img" +
-        (i + 1) +
-        ".png");
-    }
+    window.addEventListener("load", () => {
+      for (var i = 0; i < frames; i++) {
+        images[i] = new Image();
+        images[i].onload = this.LoadChecker;
+        images[i].src = require("../assets/TransitionFrames/img" +
+          (i + 1) +
+          ".png");
+      }
+    });
   },
   methods: {
     LoadChecker() {

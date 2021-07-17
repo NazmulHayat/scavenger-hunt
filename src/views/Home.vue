@@ -19,9 +19,7 @@
         :replace-interval="1000"
         class="typewriter pt-2"
       >
-        <div class="welcome-text">
-          Easter Egg Hunt
-        </div>
+        <div class="welcome-text">Easter Egg Hunt</div>
       </typewriter>
     </div>
     <v-container class="pp px-6 d-flex flex-column justify-center" fluid>
@@ -75,10 +73,14 @@
       </v-card>
     </v-container>
     <Popup />
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="3000"
-    >{{errormsg}}</v-snackbar>
+    <v-snackbar v-model="snackbar" :timeout="5000"
+      >{{ errormsg }}
+      <template v-slot:action="{ attrs }">
+        <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+          Close
+        </v-btn>
+      </template></v-snackbar
+    >
   </div>
 </template>
 
@@ -93,32 +95,30 @@ export default {
   data: () => ({
     uid: "",
     ans: "",
-    uidisInvalid:false,
-    invaliduid:"",
-    dialog: false,
-    text: "Easter Egg Hunt",
-    loaded: false,
+    uidisInvalid: false,
+    invaliduid: "",
     animating: false,
     verdict: "Wrong",
     desc: "",
     image: null,
     UpdtAns: false,
-    errormsg : "",
-    snackbar : false,
+    errormsg: "",
+    snackbar: false,
+    transitionloaded: false,
     rules: {
       required: [(v) => !!v || "Required."],
       MinLength: [(v) => v.length >= 5 || "Min length of 5."],
       invalid: [
         (v) =>
           /^((?![.#$[\]"']).)*$/.test(v) || "input contains invalid characters",
-      ]
+      ],
     },
   }),
   methods: {
-    UIdCheck(v){
-      if(v==this.invaliduid && this.uidisInvalid) return "The given User ID is invalid";
+    UIdCheck(v) {
+      if (v == this.invaliduid && this.uidisInvalid)
+        return "The given User ID is invalid";
       return true;
-
     },
     submit() {
       //validations
@@ -135,7 +135,7 @@ export default {
         uid: this.uid,
         ans: this.ans,
       };
-      let code=null;
+      let code = null;
       fetch("https://easter-egg-api.herokuapp.com/easter-egg-hunt", {
         method: "PATCH",
         headers: {
@@ -151,15 +151,17 @@ export default {
           return data.json();
         })
         .then((res) => {
-          if(code == 418){
-            this.uidisInvalid=true;
-            this.invaliduid=this.uid;
+          if (code == 418) {
+            this.uidisInvalid = true;
+            this.invaliduid = this.uid;
             this.$refs.form.validate();
           }
-          if(res.verdict!="Accepted" && res.verdict!="Wrong"){
+          if (res.verdict != "Accepted" && res.verdict != "Wrong") {
             this.errormsg = res.verdict + ": " + res.message;
             this.snackbar = true;
-            document.getElementsByClassName("loading")[0].classList.remove("visible");
+            document
+              .getElementsByClassName("loading")[0]
+              .classList.remove("visible");
             document.getElementsByClassName("inside-text")[0].style.visibility =
               "visible";
             this.animating = false;
@@ -170,11 +172,23 @@ export default {
           this.desc = res.message;
           this.image = res.image;
           document.getElementsByClassName("easteranspg")[0].addEventListener(
-            "ImagesLoaded", () => {
-              this.DataLoaded();
-            }, { once: true });
+            "ImagesLoaded",
+            () => {
+              if (this.transitionloaded) this.DataLoaded();
+              else {
+                document.getElementsByClassName("ink")[0].addEventListener(
+                  "ImagesLoaded",
+                  () => {
+                    this.DataLoaded();
+                  },
+                  { once: true }
+                );
+              }
+            },
+            { once: true }
+          );
           this.UpdtAns = !this.UpdtAns;
-        })
+        });
     },
     DataLoaded() {
       document.getElementsByClassName("loading")[0].classList.remove("visible");
@@ -214,6 +228,13 @@ export default {
     if (typeof Storage != undefined) {
       if (localStorage.uid) this.uid = localStorage.uid;
     }
+    document.getElementsByClassName("ink")[0].addEventListener(
+      "ImagesLoaded",
+      () => {
+        this.transitionloaded = true;
+      },
+      { once: true }
+    );
   },
 };
 </script>
@@ -358,7 +379,6 @@ export default {
   animation: transitionIn 1.5s;
 }
 
-
 .button69 {
   background-color: black;
   color: rgb(255, 255, 255);
@@ -408,7 +428,7 @@ export default {
   text-align: center;
 }
 
-.welcome-text{
+.welcome-text {
   font-family: Freshman;
   font-size: 50px;
   color: black;
