@@ -19,7 +19,7 @@
         :replace-interval="1000"
         class="typewriter pt-2"
       >
-        <div class="welcome-text welcome-text1 welcome-text2 welcome-text3">
+        <div class="welcome-text">
           Easter Egg Hunt
         </div>
       </typewriter>
@@ -408,8 +408,8 @@ export default {
   text-align: center;
 }
 
-.welcome-text.welcome-text1.welcome-text2.welcome-text3 {
-  font-family: Freshman !important;
+.welcome-text{
+  font-family: Freshman;
   font-size: 50px;
   color: black;
 }
@@ -428,12 +428,12 @@ export default {
 }
 
 @media only screen and (min-width: 580px) {
-  .welcome-text.welcome-text1.welcome-text2.welcome-text3 {
+  .welcome-text {
     font-size: 60px;
   }
 }
 @media only screen and (min-width: 690px) {
-  .welcome-text.welcome-text1.welcome-text2.welcome-text3 {
+  .welcome-text {
     font-size: 70px;
   }
 }
@@ -442,7 +442,7 @@ export default {
   .main-body {
     max-width: 800px;
   }
-  .welcome-text.welcome-text1.welcome-text2.welcome-text3 {
+  .welcome-text {
     font-size: 80px;
   }
 }
