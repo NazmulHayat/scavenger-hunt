@@ -31,7 +31,7 @@
       >
         <v-row align="center" dense justify="center">
           <v-col>
-            <v-form class="FORM" ref="form">
+            <v-form class="FORM" ref="form" @submit.prevent="submit">
               <v-text-field
                 v-model="uid"
                 label="Your ID:"
@@ -48,14 +48,12 @@
                 color="black"
                 :readonly="animating"
               ></v-text-field>
-            </v-form>
-            <div
+               <div
               class="amra pt-4 pb-2"
               style="display: flex; justify-content: center"
             >
               <button
-                type="button"
-                @click="submit()"
+                type="submit"
                 class="button69 font-weight-bold"
                 x-large
               >
@@ -68,6 +66,8 @@
                 </div>
               </button>
             </div>
+            </v-form>
+           
           </v-col>
         </v-row>
       </v-card>

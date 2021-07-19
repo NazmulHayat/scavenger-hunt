@@ -46,14 +46,19 @@
             ><img
               width="47"
               height="65"
-              src="../assets/egg symbol.png"
+              src="https://github.com/twitter/twemoji/raw/master/assets/svg/2728.svg"
               v:shapes="Picture_x0020_1" /></span
           ><span
             lang="EN-US"
             style="font-size: 12pt; line-height: 106%; mso-ansi-language: EN-US"
           ></span>
         </p>
-
+        <p class="MsoNormal" align="center" style="text-align: center">
+          <span
+            lang="EN-US"
+            style="font-size: 12pt; line-height: 106%; mso-ansi-language: EN-US"
+            >(The sparkle emoji)</span>
+        </p>
         <p class="MsoNormal" align="center" style="text-align: center">
           <span
             lang="EN-US"
