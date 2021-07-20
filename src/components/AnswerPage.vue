@@ -12,7 +12,7 @@
             >
             <span v-else class="red--text text--darken-3">{{ verdict }}</span>
           </div>
-          <div class="desc text-center">{{ desc }}</div>
+          <div class="desc text-center" v-html="htmlout"></div>
         </div>
         <div v-if="!noimage" class="img-cont pb-2">
           <img class="img" id="ConImg" />
@@ -25,6 +25,7 @@
 
 
 <script>
+import twemoji from "twemoji";
 export default {
   name: "AnswerPage",
   props: {
@@ -48,8 +49,16 @@ export default {
   data() {
     return {
       TryCnt: 0,
-      noimage:true
+      noimage: true,
     };
+  },
+  computed: {
+    htmlout() {
+      return twemoji.parse(this.desc, {
+        folder: "svg",
+        ext: ".svg",
+      });
+    },
   },
   watch: {
     Updt: function () {
@@ -57,26 +66,27 @@ export default {
       if (this.verdict == "Wrong") {
         loc = require("../assets/TryAgainMemes/try" + this.TryCnt + ".jpg");
       }
-      let IMAGE = new Image();
-      IMAGE.onload = () => {
-        document.getElementById("ConImg").src = IMAGE.src;
-        document
-          .getElementsByClassName("easteranspg")[0]
-          .dispatchEvent(new Event("ImagesLoaded"));
-      };
+
       if (loc != null) {
         document
           .getElementsByClassName("card-body")[0]
           .classList.remove("noimage");
-          this.noimage=false;
-        IMAGE.src = loc;
-      }
-      else{
+        this.noimage = false;
+        let IMAGE = new Image();
+        IMAGE.onload = () => {
+          document.getElementById("ConImg").src = IMAGE.src;
           document
+            .getElementsByClassName("easteranspg")[0]
+            .dispatchEvent(new Event("ImagesLoaded"));
+        };
+        IMAGE.src = loc;
+      } else {
+        document
           .getElementsByClassName("card-body")[0]
           .classList.add("noimage");
-          this.noimage=true;
-          document.getElementsByClassName("easteranspg")[0]
+        this.noimage = true;
+        document
+          .getElementsByClassName("easteranspg")[0]
           .dispatchEvent(new Event("ImagesLoaded"));
       }
       if (this.verdict == "Wrong") {
@@ -119,7 +129,7 @@ export default {
   align-content: center;
 }
 .img {
-  min-height: 100px;
+  min-height: 200px;
   max-height: 100%;
   height: 100%;
   display: block;
@@ -132,9 +142,20 @@ export default {
 .desc {
   font-size: 16px;
 }
+
+.emoji {
+  height: 16px;
+  width: auto;
+}
+
 @media only screen and (min-width: 600px) {
   .desc {
     font-size: 18px;
+  }
+
+  .emoji {
+    height: 18px;
+    width: auto;
   }
 }
 @media only screen and (min-width: 900px) {
@@ -143,6 +164,11 @@ export default {
   }
   .desc {
     font-size: 20px;
+  }
+
+  .emoji {
+    height: 20px;
+    width: auto;
   }
   .card-body {
     width: 700px;
@@ -158,6 +184,11 @@ export default {
   }
   .desc {
     font-size: 25px;
+  }
+
+  .emoji {
+    height: 25px;
+    width: auto;
   }
   .card-body {
     width: 800px;
@@ -179,6 +210,10 @@ export default {
   }
   .desc {
     font-size: 27px;
+  }
+  .emoji {
+    height: 27px;
+    width: auto;
   }
   .card-body {
     width: 1000px;

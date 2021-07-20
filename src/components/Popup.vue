@@ -47,7 +47,7 @@
               width="47"
               height="65"
               src="https://github.com/twitter/twemoji/raw/master/assets/svg/2728.svg"
-              v:shapes="Picture_x0020_1" /></span
+              v:shapes="Picture_x0020_1" alt="✨"/></span
           ><span
             lang="EN-US"
             style="font-size: 12pt; line-height: 106%; mso-ansi-language: EN-US"
