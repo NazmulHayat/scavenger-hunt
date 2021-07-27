@@ -63,7 +63,7 @@ export default {
   watch: {
     Updt: function () {
       let loc = this.img;
-      if (this.verdict == "Wrong") {
+      if (this.verdict == "Wrong" && loc!=null) {
         loc = require("../assets/TryAgainMemes/try" + this.TryCnt + ".jpg");
       }
 
