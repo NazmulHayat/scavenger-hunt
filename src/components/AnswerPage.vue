@@ -25,7 +25,7 @@
 
 
 <script>
-import twemoji from "twemoji";
+// import twemoji from "twemoji";
 export default {
   name: "AnswerPage",
   props: {
@@ -53,12 +53,12 @@ export default {
     };
   },
   computed: {
-    htmlout() {
-      return twemoji.parse(this.desc, {
-        folder: "svg",
-        ext: ".svg",
-      });
-    },
+    // htmlout() {
+    //   return twemoji.parse(this.desc, {
+    //     folder: "svg",
+    //     ext: ".svg",
+    //   });
+    // },
   },
   watch: {
     Updt: function () {
