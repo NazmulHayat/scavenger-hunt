@@ -110,7 +110,7 @@ export default {
       MinLength: [(v) => v.length >= 5 || "Min length of 5."],
       invalid: [
         (v) =>
-          /^(([a-z]|[0-9]|[_.]))*$/.test(v) || "input contains invalid characters",
+          /^((?![.#$[\]"']).)*$/.test(v) || "input contains invalid characters",
       ],
     },
   }),
