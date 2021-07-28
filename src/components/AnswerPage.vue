@@ -25,7 +25,7 @@
 
 
 <script>
-// import twemoji from "twemoji";
+import twemoji from "twemoji";
 export default {
   name: "AnswerPage",
   props: {
@@ -53,20 +53,20 @@ export default {
     };
   },
   computed: {
-    // htmlout() {
-    //   return twemoji.parse(this.desc, {
-    //     folder: "svg",
-    //     ext: ".svg",
-    //   });
-    // },
+    htmlout() {
+      return twemoji.parse(this.desc, {
+        folder: "svg",
+        ext: ".svg",
+      });
+    },
   },
   watch: {
     Updt: function () {
       let loc = this.img;
-      if (this.verdict == "Wrong" && loc!=null) {
+      if (this.verdict == "Wrong" && loc==null) {
         loc = require("../assets/TryAgainMemes/try" + this.TryCnt + ".jpg");
+        this.TryCnt = (this.TryCnt + 1) % 8;
       }
-
       if (loc != null) {
         document
           .getElementsByClassName("card-body")[0]
@@ -88,9 +88,6 @@ export default {
         document
           .getElementsByClassName("easteranspg")[0]
           .dispatchEvent(new Event("ImagesLoaded"));
-      }
-      if (this.verdict == "Wrong") {
-        this.TryCnt = (this.TryCnt + 1) % 8;
       }
     },
   },
@@ -142,17 +139,14 @@ export default {
 .desc {
   font-size: 16px;
 }
-
 .emoji {
   height: 16px;
   width: auto;
 }
-
 @media only screen and (min-width: 600px) {
   .desc {
     font-size: 18px;
   }
-
   .emoji {
     height: 18px;
     width: auto;
@@ -165,7 +159,6 @@ export default {
   .desc {
     font-size: 20px;
   }
-
   .emoji {
     height: 20px;
     width: auto;
@@ -185,7 +178,6 @@ export default {
   .desc {
     font-size: 25px;
   }
-
   .emoji {
     height: 25px;
     width: auto;
